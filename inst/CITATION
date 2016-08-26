@@ -1,0 +1,14 @@
+bibentry("Article",
+         title = "{Spliced synthetic genes as internal controls in RNA sequencing experiments}",
+         author = c(person("Simon", "Hardwick"),
+                	person("Wendy", "Chen"),
+                 	person("Ted", "Wong"),
+                    person("Tim", "Mercer")),
+         year = 2016,
+         journal = "Nature Methods",
+    	 note = "In press",
+         textVersion = 
+         paste("Simon A. Hardwick, Wendy Y. Chen, Ted Wong and Tim R. Mercer","(2016).",
+               "Spliced synthetic genes as internal controls in RNA sequencing experiments",
+               "Nature Methods")
+         )
