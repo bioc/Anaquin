@@ -117,6 +117,7 @@
     return (TRUE)
 }
 
+setClassUnion("factorOrNULL",members=c("factor", "character", "NULL")) 
 setClassUnion("numericOrNULL",members=c("numeric", "NULL")) 
 setClassUnion("characterOrNULL",members=c("character", "NULL"))
 setClassUnion("data.frameORvectorOrNULL", c("data.frame", "vector", "NULL"))
@@ -142,7 +143,7 @@ setClass("AnaquinData", representation(analysis = 'character',
                                        ratio    = 'numericOrNULL',
                                        input    = 'numericOrNULL',
                                        measured = 'data.frameORvectorOrNULL',
-                                       label    = 'characterOrNULL',
+                                       label    = 'factorOrNULL',
                                        score    = 'numericOrNULL'),
                           prototype(std         = NULL,
                                     pval        = NULL,

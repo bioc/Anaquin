@@ -38,8 +38,11 @@ plotROC <- function(data, refRats, title=NULL, legTitle='Ratio', ...)
     uniqs <- unique(ratios)
     
     # Remove the reference ratio (if any)
-    uniqs <- uniqs[uniqs != refRats & !(uniqs %in% refRats)]
-    
+    if (!is.null(refRats))
+    {
+        uniqs <- uniqs[uniqs != refRats & !(uniqs %in% refRats)]
+    }
+
     stopifnot(length(uniqs) > 0)
 
     #
@@ -62,8 +65,15 @@ plotROC <- function(data, refRats, title=NULL, legTitle='Ratio', ...)
         # Reference ratio
         refRat <- refRats[[i]];
         
-        t <- data[!is.na(data$ratio) &
-                  (data$ratio==ratio | data$ratio==refRat),]                
+        if (is.null(refRat))
+        {
+            t <- data[!is.na(data$ratio) & data$ratio==ratio,]
+        }
+        else
+        {
+            t <- data[!is.na(data$ratio) &
+                          (data$ratio==ratio | data$ratio==refRat),]
+        }
 
         # No FP or TP?
         if (length(unique(t$label)) == 1)

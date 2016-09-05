@@ -5,7 +5,7 @@
 Plot a linear model between sequins against measured abundance (eg: FPKM).
 }
 \usage{
-plotLinear(data, title, xlab, ylab, showSD, showLOQ, showAxis, ...)
+plotLinear(data, title, xlab, ylab, showSD, showLOQ, xBreaks, yBreaks, showAxis, ...)
 }
 \arguments{
   \item{data}{Anaquin dataset created by \code{AnaquinData}. It needs to define
@@ -13,8 +13,10 @@ plotLinear(data, title, xlab, ylab, showSD, showLOQ, showAxis, ...)
   \item{title}{Label of the plot.}
   \item{xlab}{Label for the x-axis}
   \item{ylab}{Label for the y-axis}
+  \item{xBreaks}{Breaks for the x-axis}
+  \item{yBreaks}{Breaks for the y-axis}
   \item{showSD}{Show standard deviation bars vertically? Default to
-                \code{FALSE}.}
+                \code{TRUE}.}
   \item{showLOQ}{Show limit-of-quantification? Default to \code{TRUE}.}
   \item{showAxis}{Show x-axis and y-axis? Default to \code{TRUE}.}
   \item{...}{Reserved for internal testing}  

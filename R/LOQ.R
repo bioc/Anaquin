@@ -11,13 +11,57 @@
 
 estimateLOQ <- function(x, y, showDetails=FALSE)
 {
+    percentile <- ecdf(x)
+
+    #
+    # LOQ estimation is tricky; inputs could be anything and there's no single
+    # model that can possibly model everything. However, we can consider the
+    # common scenarios.
+    #
+    # It's well known that least-square regression is sensitive to outliers. LOQ
+    # shouldn't depend on those outliers. The following techniques are used:
+    #
+    #    - Cook's distance
+    #    - Standardized residuals
+    #
+    # Leverage is unnecessary because the range of the input concentration is
+    # fixed.
+    #
+
+    data  <- data.frame(x=x, y=y)
+    data  <- data[order(x),]
+    data  <- data[!is.na(data$y),]
+    
+    # Compute pecentile for the input concentration
+    data$perc <- percentile(data$x)
+    
+    # Fit a model to all data points
+    model.all <- lm(y~x, data=data)
+
+    data$CD <- cooks.distance(model.all)
+    data$RS <- rstudent(model.all)
+    
+    #
+    # Attempt 1: Remove outliers after LOQ
+    #
+    
+    data <- data[data$perc < 0.40 | (data$CD < 4/nrow(data) & abs(data$RS) <= 3),]
+
+    #
+    # Attempt 2: Remove outliers in the before LOQ. The point of LOQ is to use
+    #            stochastic points to estimate the limit, so we should be more
+    #            conservative.
+    #
+    
+    data <- data[(data$CD < 8/nrow(data)) & (abs(data$RS) <= 6),]
+    
+    # Fit a new model withour the outliers
+    model <- lm(y~x, data=data)
+
     #
     # For x=1,2,3,...,n, we would only fit b=3,4,...,n-2.
     # Therefore the length of the frame is n-4.
     #
-    
-    d <- data.frame(x=x, y=y)
-    d <- d[order(x),]
 
     r <- data.frame(k=rep(NA,length(x)),
                     sums=rep(NA,length(x)),
@@ -38,24 +82,24 @@ estimateLOQ <- function(x, y, showDetails=FALSE)
         #   -> (1,2) and (3,4).
         #
         
-        d1 <- head(d,i)
-        d2 <- tail(d,-i)
+        d1 <- head(data,i)
+        d2 <- tail(data,-i)
         
         stopifnot(nrow(d1) >= 2)
         stopifnot(nrow(d2) >= 2)
-        stopifnot(nrow(d1)+nrow(d2) == nrow(d))
+        stopifnot(nrow(d1)+nrow(d2) == nrow(data))
         
         m1 <- lm(y~x, data=d1)
         m2 <- lm(y~x, data=d2)
         
-        return (list(breaks=d[i,]$x,
+        return (list(breaks=data[i,]$x,
                    'lModel'=m1,
                    'rModel'=m2,
                        'lr'=cor(d1$x,d1$y),
                        'rr'=cor(d2$x,d2$y)))
     }
 
-    lapply(2:(nrow(d)-3), function(i)
+    lapply(2:(nrow(data)-3), function(i)
     {
         options(warn=-1)
         
@@ -108,48 +152,77 @@ estimateLOQ <- function(x, y, showDetails=FALSE)
         p <- p + geom_line()
         print(p)
     }
+    
+    #
+    # How to define the LOQ breakpoint? There're several measures:
+    #
+    #   - Quartile
+    #   - Total SSE
+    #   - Pearson's correlation
+    #
 
     #
-    # How to define the LOQ breakpoint?
+    # LOQ is defined be in lower quartiles (eg: we don't want it near
+    # the highly expressed genes).
     #
-    #   - Minimum where the SSE is
-    #
     
-    percentile <- ecdf(x)
+    tmp <- r[percentile(r$k) <= 0.40,]
     
-    # Filter out the upper and lower quartiles
-    a <- r[percentile(r$k) > 0.30 & percentile(r$k) <= 0.60,]
-    
-    # Where the minimum SSE is
-    b1 <- r[which.min(r$sums),]    
+    # Total SSE
+    b1 <- tmp[which.min(tmp$sums),]    
 
-    # Where the maximum above R2 is
-    b2 <- a[which.max(a$rR2),]
+    # Pearson's correlation
+    b2 <- tmp[which.max(tmp$rR2),]
 
     b1q <- percentile(b1$k) 
     b2q <- percentile(b2$k) 
-    
-    b <- b1
 
-    #
-    # Always prefer minimum SST if possible. Switch if: 
-    #
-    #   - No reasonable solution to minimum SST
-    #
-
-    if (b1q < 0.30 & nrow(b2) > 0)
+    isReasonableBreak <- function(b)
     {
-        b <- b2        
+        if (is.null(b)) { return (NULL) }
+        
+        #
+        # Absolute detection limit. The point of LOQ is to estimate the empirical
+        # stochastic detection limit. No point if it's also the absolute limit.
+        #
+
+        if (b$k == min(tmp$k)) { return (NULL) }
+        
+        # Fit the model again
+        fit <- plm(as.numeric(row.names(b)))
+        
+        #
+        # Note that the correlation is computed on the filtered data set (not
+        # including residuals).
+        #
+        
+        if (fit$rr > cor(data$x, data$y))
+        {
+            return (fit)
+        }
+        else
+        {
+            return (NULL)
+        }
     }
-    else if (b1q > 0.70 & nrow(b2) > 0)
+
+    fit <- NULL
+    
+    if (!is.null(fit <- isReasonableBreak(b2)))
     {
         b <- b2
     }
-
-    # Fit the model again
-    fit <- plm(as.numeric(row.names(b)))
+    else if (!is.null(fit <- isReasonableBreak(b1)))
+    {
+        b <- b1
+    }
     
-    stopifnot(all.equal(summary(fit$lModel)$r.squared, b$lR2))  
+    if (is.null(b) | is.null(fit))
+    {
+        return (NULL)
+    }
+
+    stopifnot(all.equal(summary(fit$lModel)$r.squared, b$lR2))
     stopifnot(all.equal(summary(fit$rModel)$r.squared, b$rR2))
     stopifnot(all.equal(summary(fit$lModel)$coefficients[1,1], b$lInter))    
     stopifnot(all.equal(summary(fit$rModel)$coefficients[1,1], b$rInter))    
