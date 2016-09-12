@@ -143,9 +143,12 @@
     if (!is.null(title))    { p <- p + ggtitle(title)        }
     if (!is.null(legTitle)) { p <- p + labs(colour=legTitle) }
     
-    p <- p + geom_line(data=data$curve,
-                       aes_string(x='knots', y='pred', colour='ratio'),
-                       show.legend=FALSE)
+    if (!is.null(data$curve))
+    {
+        p <- p + geom_line(data=data$curve,
+                           aes_string(x='knots', y='pred', colour='ratio'),
+                           show.legend=FALSE)
+    }
 
     if (showConf & !is.null(data$curve))
     {
@@ -200,7 +203,7 @@
 }
 
 plotLODR <- function(data,
-                     FDR,
+                     FDR=NULL,
                      title=NULL,
                      xlab=NULL,
                      ylab=NULL,
@@ -229,7 +232,17 @@ plotLODR <- function(data,
     data$qval <- qval
 
     data <- data[data$pval!=0,]
-    data <- .fitLODR(data, FDR=FDR)
+    
+    if (!is.null(FDR))
+    {
+        data <- .fitLODR(data, FDR=FDR)
+    }
+    else
+    {
+        data <- list(measured=data$measured,
+                         pval=data$pval,
+                        ratio=as.factor(data$ratio))
+    }
 
     .plotLODR(data=data,
              title=title,

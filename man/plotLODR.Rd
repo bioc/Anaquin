@@ -11,7 +11,7 @@ plotLODR(data, FDR, title, xlab, ylab, legTitle, showConf, ...)
 \arguments{
   \item{data}{Anaquin dataset created by \code{AnaquinData}. It needs to
               define information in \bold{Details}.}
-  \item{FDR}{Chosen false-discovery-rate. Default to \code{0.1}.}
+  \item{FDR}{Chosen false-discovery-rate. Default to \code{NULL}.}
   \item{title}{Label of the plot. Default to \code{NULL}.}
   \item{xlab}{Label for the x-axis. Default to \code{NULL}.}
   \item{ylab}{Label for the y-axis. Default to \code{NULL}.}

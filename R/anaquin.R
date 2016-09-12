@@ -137,7 +137,7 @@ setClassUnion("data.frameORvectorOrNULL", c("data.frame", "vector", "NULL"))
 #' @slot score    Scoring for ROC
 
 setClass("AnaquinData", representation(analysis = 'character',
-                                       seqs     = 'character',
+                                       seqs     = 'factorOrNULL',
                                        std      = 'numericOrNULL',
                                        pval     = 'numericOrNULL',
                                        qval     = 'numericOrNULL',
