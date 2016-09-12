@@ -21,19 +21,19 @@ sequin ratio.
 List of sequin ratio for each sequin. Return \code{NULL} if unavailable.
 }
 \examples{
-data('seqDESeq2')
+data(UserGuideData_5.6.3)
 
 # Sequin names
-seqs <- row.names(seqDESeq2)
+seqs <- row.names(UserGuideData_5.6.3)
 
 # Expected log-fold
-ratio <- seqDESeq2$ExpLFC
+ratio <- UserGuideData_5.6.3$ExpLFC
 
 # How the ROC curves are ranked
-score <- 1-seqDESeq2$Pval
+score <- 1-UserGuideData_5.6.3$Pval
 
 # Classified labels (TP/FP)
-label <- seqDESeq2$Label
+label <- UserGuideData_5.6.3$Label
 
 anaquin <- AnaquinData(analysis='PlotROC',
                            seqs=seqs,

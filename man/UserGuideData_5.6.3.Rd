@@ -1,8 +1,8 @@
 \docType{data}
-\name{seqDESeq2}
-\alias{seqDESeq2}
+\name{UserGuideData_5.6.3}
+\alias{UserGuideData_5.6.3}
 \title{Differential expression (RnaQuin)}
-\format{A data frame:
+\format{Data frame:
 \itemize{
   \item ExpLFC: Expected log-fold change 
   \item ObsLFC: Observed log-fold change
@@ -13,14 +13,14 @@
   \item Label: Average counts across the samples  
 }}
 \usage{
-data(seqDESeq2)
+data(UserGuideData_5.6.3)
 }
 \description{
-Differential gene expression estimated by DESeq2 from the RNA-Seq experiment
-of Hardwick (2016). The data correspond to the K562 and GM12878 samples.
+Differential gene expression estimated by DESeq2. \code{Section 5.6.3}
+has details on the data set.
 }
 \value{
-A data frame with columns defined in \code{Format}.
+Data frame with columns defined in \code{Format}.
 }
 \source{
 S.A Hardwick. Spliced synthetic genes as internal controls in RNA sequencing

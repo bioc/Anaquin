@@ -22,8 +22,8 @@ For example:
 A list of RnaQuin sequin genes.
 }
 \examples{
-data(seqCuffcompare)
-isoformsToGenes(row.names(seqCuffcompare))
+data(UserGuideData_5.4.5.1)
+isoformsToGenes(row.names(UserGuideData_5.4.5.1))
 }
 
 \author{Ted Wong \email{t.wong@garvan.org.au}}

@@ -9,23 +9,23 @@ Anaquin analysis.
 AnaquinData(analysis, ...)
 }
 \arguments{
-  \item{analysis}{Type of analysis}
-  \item{...}{Context specific inputs}
-}
-\details{
-Every Anaquin analysis requires an input dataset. The function enables that
-is `\code{AnaquinData}. AnaquinData is a S4 constructor, inputs vary depending
-on the analysis.
+  \item{analysis}{Type of analysis to be performed
+                  (eg. \code{'PlotLinear'},
+                       \code{'PlotLogistic'},
+                       \code{'PlotROC'},
+                       \code{'PlotLODR'}.)}
+  \item{...}{Analysis specific data inputs.}
 
-The constructor requires the following compulsory inputs:
+The function requires the following mandatory data inputs:
 
 \tabular{ll}{
    \code{analysis} \tab Type of analysis \cr
-   \code{seqs}    \tab Sequin names  \cr
+   \code{seqs}     \tab Sequin names  \cr
+   \code{...}      \tab Analysis specific data inputs  \cr   
 }
 
-\code{analysis} gives the type of the analysis; how a statistical model should
-build for sequins. The current release supports the following analysis:
+\code{analysis} indicates the type of the analysis. The current release
+supports the following analysis:
 
 \tabular{ll}{
    \code{PlotLinear}   \tab Linear model with sequins \cr
@@ -34,26 +34,24 @@ build for sequins. The current release supports the following analysis:
    \code{PlotLODR}     \tab LODR (LOESS) analysis with sequins  \cr
 }
 
-\code{seqs} gives the sequin names; critical information otherwise no
-statistical model for sequins is possible. \code{AnaquinData} will give
+\code{seqs} gives the sequin names. The function will give
 an error message unless both \code{analysis} and \code{seqs} are given.
 
-The constructor also accepts the following optional inputs:
+The function accepts the following optional data inputs:
 
 \tabular{ll}{
-   \code{sd}       \tab Standard deviation \cr
+   \code{std}      \tab Standard deviation \cr
    \code{pval}     \tab P-value probability  \cr
    \code{qval}     \tab Q-value probability  \cr
-   \code{ratio}    \tab Expected sequin ratio (eg: allele frequency)  \cr
+   \code{ratio}    \tab Expected sequin ratio \cr
    \code{input}    \tab Input concentration (attomol/ul)  \cr
    \code{measured} \tab Measured variable (eg: FPKM)  \cr
-   \code{label}    \tab Classified labels (eg: TP, FP)  \cr
-   \code{score}    \tab How to rank ROC points? \cr
+   \code{label}    \tab Classified labels (eg: 'TP', 'FP')  \cr
+   \code{score}    \tab Value used for ranking sequins \cr
+}  
 }
-
-It is important to check the documentation for individual analysis on what the
-required inputs. We will illustrate an example for plotting a scatter plot
-between input concentration against measured FPKM values.
+\details{
+Create an Anaquin dataset. The resulting R-object is required for every Anaquin analysis.
 }
 \value{
 An S4 object of class \code{AnaquinData}.
@@ -63,20 +61,20 @@ An S4 object of class \code{AnaquinData}.
 # Example 1: Create Anaquin dataset for PlotLogistic
 #
 
-data('seqCuffcompare')
+data(UserGuideData_5.4.5.1)
 
 title <- 'Assembly Plot'
 xlab  <- 'Input Concentration (log2)'
 ylab  <- 'Sensitivity'
 
 # Sequin names
-seqs <- row.names(seqCuffcompare)
+seqs <- row.names(UserGuideData_5.4.5.1)
 
 # Input concentration
-input <- log2(seqCuffcompare$InputConcent)
+input <- log2(UserGuideData_5.4.5.1$InputConcent)
 
 # Measured sensitivity
-measured <- seqCuffcompare$Sn
+measured <- UserGuideData_5.4.5.1$Sn
 
 anaquin <- AnaquinData(analysis='PlotLogistic',
                            seqs=seqs,
@@ -89,20 +87,20 @@ plotLogistic(anaquin, title=title, xlab=xlab, ylab=ylab, showLOA=TRUE)
 # Example 2: Create Anaquin dataset for PlotLinear
 #
 
-data(seqCufflinks)
+data(UserGuideData_5.4.6.3)
 
 title <- 'Gene Expression'
 xlab  <- 'Input Concentration (log2)'
 ylab  <- 'FPKM (log2)'
 
 # Sequin names
-seqs <- row.names(seqCufflinks)
+seqs <- row.names(UserGuideData_5.4.6.3)
 
 # Input concentration
-input <- log2(seqCufflinks$InputConcent)
+input <- log2(UserGuideData_5.4.6.3$InputConcent)
 
 # Measured FPKKM
-measured <- log2(seqCufflinks[,2:4])
+measured <- log2(UserGuideData_5.4.6.3[,2:4])
 
 anaquin <- AnaquinData(analysis='PlotLinear',
                            seqs=seqs,
@@ -115,19 +113,19 @@ plotLinear(anaquin, title=title, xlab=xlab, ylab=ylab, showLOQ=TRUE)
 # Example 3: Create Anaquin dataset for plotROC
 #
 
-data('seqDESeq2')
+data(UserGuideData_5.6.3)
 
 # Sequin names
-seqs <- row.names(seqDESeq2)
+seqs <- row.names(UserGuideData_5.6.3)
 
 # Expected log-fold
-ratio <- seqDESeq2$ExpLFC
+ratio <- UserGuideData_5.6.3$ExpLFC
 
 # How ROC points are ranked (scoring function)
-score <- 1-seqDESeq2$Pval
+score <- 1-UserGuideData_5.6.3$Pval
 
 # Classified labels (TP/FP)
-label <- seqDESeq2$Label
+label <- UserGuideData_5.6.3$Label
 
 anaquin <- AnaquinData(analysis='PlotROC',
                            seqs=seqs,
@@ -141,26 +139,26 @@ plotROC(anaquin, title='ROC Plot', refRats=0)
 # Example 4: Create Anaquin dataset for plotLODR
 #
 
-data('seqDESeq2')
+data(UserGuideData_5.6.3)
 
 xlab  <- 'Average Counts'
 ylab  <- 'P-value'
 title <- 'LODR Curves'
 
 # Sequin names
-seqs <- row.names(seqDESeq2)
+seqs <- row.names(UserGuideData_5.6.3)
 
 # Measured average mean
-measured <- seqDESeq2$Mean
+measured <- UserGuideData_5.6.3$Mean
 
 # Expected log-fold
-ratio <- seqDESeq2$ExpLFC
+ratio <- UserGuideData_5.6.3$ExpLFC
 
 # P-value
-pval <- seqDESeq2$Pval
+pval <- UserGuideData_5.6.3$Pval
 
 # Q-value
-qval <- seqDESeq2$Qval
+qval <- UserGuideData_5.6.3$Qval
 
 anaquin <- AnaquinData(analysis='PlotLODR',
                            seqs=seqs,

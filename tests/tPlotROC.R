@@ -4,13 +4,13 @@
 #  Ted Wong, Bioinformatic Software Engineer at Garvan Institute
 #
 
-library('RUnit')
-library('Anaquin')
+library(RUnit)
+library(Anaquin)
 
 test.PlotROC_1 <- function()
 {
-    data('seqDESeq2')
-    data <- seqDESeq2
+    data(UserGuideData_5.6.3)
+    data <- UserGuideData_5.6.3
 
     data$label <- ifelse(abs(data$ExpLFC) <= 0, 'FP', 'TP')
 
@@ -21,22 +21,22 @@ test.PlotROC_1 <- function()
                            label=data$label)
 
     r <- plotROC(data, refRats=0, unitTest=TRUE)
-    
-    checkEquals(r$AUC[1,]$Ratio, 1)
-    checkEqualsNumeric(r$AUC[1,]$AUC, 0.7692)
-    checkEquals(r$AUC[2,]$Ratio, 2)
-    checkEqualsNumeric(r$AUC[2,]$AUC, 0.8223)
-    checkEquals(r$AUC[3,]$Ratio, 3)
-    checkEqualsNumeric(r$AUC[3,]$AUC, 0.9485)
-    checkEquals(r$AUC[4,]$Ratio, 4)
-    checkEqualsNumeric(r$AUC[4,]$AUC, 0.8608)
+
+    checkEquals(as.character(r$AUC[1,]$Ratio), '1')
+    checkEqualsNumeric(r$AUC[1,]$AUC, 0.6713)
+    checkEquals(as.character(r$AUC[2,]$Ratio), '2')
+    checkEqualsNumeric(r$AUC[2,]$AUC, 0.7955)
+    checkEquals(as.character(r$AUC[3,]$Ratio), '3')
+    checkEqualsNumeric(r$AUC[3,]$AUC, 0.8939)
+    checkEquals(as.character(r$AUC[4,]$Ratio), '4')
+    checkEqualsNumeric(r$AUC[4,]$AUC, 0.9062)
 }
 
 test.PlotROC_2 <- function()
 {
-    data('seqCufflinks')
+    data(UserGuideData_5.4.6.3)
       
-    data <- seqCufflinks
+    data <- UserGuideData_5.4.6.3
     data <- AnaquinData(analysis='PlotLinear',
                             seqs=row.names(data),
                            input=log2(data$InputConcent),

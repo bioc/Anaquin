@@ -28,6 +28,6 @@
     yrange <- maxY - minY
 
     p <- p + coord_fixed(ratio=xrange/yrange)
- 
+    
     return (p)    
 }

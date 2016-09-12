@@ -16,8 +16,10 @@ plotLinear <- function(data,
 {
     stopifnot(class(data) == 'AnaquinData')
     
-    if (analysis(data) != 'PlotLinear')
+    if (analysis(data) != 'PlotLinear' &
+        analysis(data) != 'plotLinear')
     {
+        print(analysis(data))
         stop('plotLinear requires PlotLinear analysis')
     }
 

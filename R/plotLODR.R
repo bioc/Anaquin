@@ -209,7 +209,8 @@ plotLODR <- function(data,
 {
     stopifnot(class(data) == 'AnaquinData')
     
-    if (analysis(data) != 'PlotLODR')
+    if (analysis(data) != 'PlotLODR' &
+        analysis(data) != 'plotLODR')
     {
         stop('plotLODR requires PlotLODR analysis')
     }

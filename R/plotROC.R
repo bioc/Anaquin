@@ -8,7 +8,8 @@ plotROC <- function(data, refRats, title=NULL, legTitle='Ratio', ...)
 {
     stopifnot(class(data) == 'AnaquinData')
     
-    if (analysis(data) != 'PlotROC')
+    if (analysis(data) != 'PlotROC' &
+        analysis(data) != 'plotROC')
     {
         stop('plotROC requires PlotROC analysis')
     }

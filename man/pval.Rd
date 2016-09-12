@@ -21,22 +21,22 @@ probability.
 List of p-value proability for each sequin. Return \code{NULL} if unavailable.
 }
 \examples{
-data('seqDESeq2')
+data(UserGuideData_5.6.3)
 
 # Sequin names
-seqs <- row.names(seqDESeq2)
+seqs <- row.names(UserGuideData_5.6.3)
 
 # Expected log-fold
-ratio <- seqDESeq2$ExpLFC
+ratio <- UserGuideData_5.6.3$ExpLFC
 
 # Measured average abundance
-measured <- seqDESeq2$Mean
+measured <- UserGuideData_5.6.3$Mean
 
 # P-value
-pv <- seqDESeq2$Pval
+pv <- UserGuideData_5.6.3$Pval
 
 # Q-value
-qv <- seqDESeq2$Qval
+qv <- UserGuideData_5.6.3$Qval
 
 anaquin <- AnaquinData(analysis='PlotLODR',
                            seqs=seqs,

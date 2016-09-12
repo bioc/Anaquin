@@ -13,7 +13,8 @@ plotLogistic <- function(data,
 {
     stopifnot(class(data) == 'AnaquinData')
 
-    if (analysis(data) != 'PlotLogistic')
+    if (analysis(data) != 'PlotLogistic' &
+        analysis(data) != 'plotLogistic')
     {
         stop('plotLogistic requires PlotLogistic analysis')
     }

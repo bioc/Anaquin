@@ -21,16 +21,16 @@ abundance.
 List of measured abundance for each sequin. Return \code{NULL} if unavailable.
 }
 \examples{
-data('seqCufflinks')
+data(UserGuideData_5.4.6.3)
 
 # Sequin names
-seqs <- row.names(seqCufflinks)
+seqs <- row.names(UserGuideData_5.4.6.3)
 
 # Input concentration
-input <- log2(seqCufflinks$InputConcent)
+input <- log2(UserGuideData_5.4.6.3$InputConcent)
 
 # Measured FPKM
-FPKM <- log2(seqCufflinks[,2:4])
+FPKM <- log2(UserGuideData_5.4.6.3[,2:4])
 
 anaquin <- AnaquinData(analysis='PlotLinear',
                            seqs=seqs,

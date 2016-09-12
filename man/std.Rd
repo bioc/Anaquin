@@ -21,19 +21,19 @@ deviation in the data set.
 List of standard deviation for each sequin. Return \code{NULL} if unavailable.
 }
 \examples{
-data('seqDESeq2')
+data(UserGuideData_5.6.3)
 
 # Sequin names
-names <- row.names(seqDESeq2)
+names <- row.names(UserGuideData_5.6.3)
 
 # Expected LFC
-input <- log2(seqDESeq2$ExpLFC)
+input <- log2(UserGuideData_5.6.3$ExpLFC)
 
 # Measured LFC
-measured <- log2(seqDESeq2$ObsLFC)
+measured <- log2(UserGuideData_5.6.3$ObsLFC)
 
 # Standard deviation
-sd <- seqDESeq2$SD
+sd <- UserGuideData_5.6.3$SD
 
 anaquin <- AnaquinData(analysis='PlotLinear',
                            seqs=names,

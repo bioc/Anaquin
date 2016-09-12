@@ -21,16 +21,16 @@ in the data set.
 List of sequin names.
 }
 \examples{
-data('seqCufflinks')
+data(UserGuideData_5.4.6.3)
 
 # Sequin names
-names <- row.names(seqCufflinks)
+names <- row.names(UserGuideData_5.4.6.3)
 
 # Input concentration
-input <- log2(seqCufflinks$InputConcent)
+input <- log2(UserGuideData_5.4.6.3$InputConcent)
 
 # Measured FPKM
-measured <- log2(seqCufflinks[,2:4])
+measured <- log2(UserGuideData_5.4.6.3[,2:4])
 
 anaquin <- AnaquinData(analysis='PlotLinear',
                            seqs=names,

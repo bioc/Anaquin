@@ -29,7 +29,8 @@
     }
 
     # Expected analysis types
-    expAly = c('PlotLODR', 'PlotROC', 'PlotLinear', 'PlotLogistic')
+    expAly = c('PlotLODR', 'PlotROC', 'PlotLinear', 'PlotLogistic',
+               'plotLODR', 'plotROC', 'plotLinear', 'plotLogistic')
 
     if (!(aly %in% expAly))
     {
@@ -38,7 +39,7 @@
         return (paste(str, sep = ""))
     }
     
-    if (aly == 'PlotLODR')
+    if (aly == 'PlotLODR' | aly == 'plotLODR')
     {
         if (is.null(ratio(object)))
         {
@@ -59,7 +60,7 @@
         }
     }
     
-    if (aly == 'PlotROC')
+    if (aly == 'PlotROC' | aly == 'plotROC')
     {
         if (is.null(ratio(object)))
         {
@@ -79,7 +80,7 @@
                      Please specifiy it with "score"') }
     }
 
-    if (aly == 'PlotLinear')
+    if (aly == 'PlotLinear' | aly == 'plotLinear')
     {
         if (is.null(input(object)))
         {
@@ -94,7 +95,7 @@
         }
     }
 
-    if (aly == 'PlotLogistic')
+    if (aly == 'PlotLogistic' | aly == 'plotLogistic')
     {
         if (is.null(input(object)))
         {
@@ -168,7 +169,7 @@ setMethod("show",
 
                cat('\nAnaquin data for ', aly, ' analysis', '\n', sep='')
                cat('Number of sequins: ', length(seqs(object)), '\n\n', sep='')
-               cat('- Use sequins(x) to get sequins \n', sep='')
+               cat('- Use seqs(x) to get sequins \n', sep='')
                
                if (aly == 'PlotLODR')
                {
