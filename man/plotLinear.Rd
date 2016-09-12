@@ -2,7 +2,7 @@
 \alias{plotLinear}
 \title{Plot linear model for sequins}
 \description{
-Plot a scatter plot with expected abundance on the x-axis, and measured
+Create a scatter plot with expected abundance on the x-axis, and measured
 abundance on the y-axis.
 }
 \usage{
