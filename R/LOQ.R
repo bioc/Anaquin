@@ -168,6 +168,11 @@ estimateLOQ <- function(x, y, showDetails=FALSE)
     
     tmp <- r[percentile(r$k) <= 0.40,]
     
+    if (nrow(tmp) == 0)
+    {
+        return (NULL)
+    }
+    
     # Total SSE
     b1 <- tmp[which.min(tmp$sums),]    
 
