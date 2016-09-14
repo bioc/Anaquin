@@ -13,6 +13,6 @@ Depends: R (>= 3.3)
 Imports: ggplot2, ROCR, knitr, qvalue, locfit, methods, stats, utils, plyr
 Suggests: RUnit, rmarkdown
 VignetteBuilder: knitr
-BugReports: https://github.com/student-t/Anaquin-R/issues
+BugReports: https://github.com/student-t/RAnaquin/issues
 LazyData: true
 biocViews: DifferentialExpression, Preprocessing, RNASeq, GeneExpression, Software
