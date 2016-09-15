@@ -43,7 +43,7 @@ This vignette is written for R-usage. However, Anaquin is a framework covering
 the entire RNA-Seq workflow; reads alignment, transcriptome assembly, gene
 expression and differential analysis, etc. Consequently, the R-package
 (and it's documentation) is a subset of the overall Anaquin framework. We also
-distribute a workflow guide with this vigentte on how Anaquin can be integrated
+distribute a workflow guide with this vignette on how Anaquin can be integrated
 with a bioinformatics workflow. The guide should be distributed with this
 vignette and is also available on our website.
 
@@ -58,7 +58,7 @@ determination of sequences within a user’s sample. NGS methods have been
 applied widely, and have fuelled major advances in the life sciences and
 clinical health care over the past decade. However, NGS typically generates
 a large amount of sequencing data that must be first analyzed and interpreted
-with bioinformatic tools. There is no standard way to perform an analysis of
+with bioinformatics tools. There is no standard way to perform an analysis of
 NGS data; different tools provide different advantages in different
 situations. The complexity and variation of sequences further compound this
 problem, and there is little reference by which compare next-generation
@@ -81,7 +81,7 @@ downloaded from our website:
 
 [www.sequin.xyz](www.sequin.xyz )
 
-Let's demostrate RnaQuin mixture A with a simple example. Load the mixture
+Let's demonstrate RnaQuin mixture A with a simple example. Load the mixture
 file (you can also download the file directly from our website):
 
 ```{r}
@@ -126,10 +126,10 @@ ylab  <- 'Measured FPKM (log2)'
 plotLinear(anaquin, title=title, xlab=xlab, ylab=ylab)
 ```
 
-In our second experiment, the weakly expressed isoforms exhibt stochastic
+In our second experiment, the weakly expressed isoforms exhibit stochastic
 behavior and are clearly not linear with the input concentration. Furthermore,
 there is a limit of quantification (LOQ); below which accuracy of the
-experiement becomes questionable.
+experiment becomes questionable.
 
 ```{r, message=FALSE, results='hide', fig.align='center'}
 names <- row.names(mixtureA)
@@ -367,4 +367,4 @@ plotLODR(anaquin, xlab=xlab, ylab=ylab, title=title, FDR=0.1)
 
 Unsurprisingly, p-value is inverse quadratically related with average counts.
 All the LFC ratios systematically outperform LFC 0. The function also estimates
-the emphricial detection limits, [1] has the details.
+the empirical detection limits, [1] has the details.
