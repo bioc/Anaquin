@@ -28,9 +28,11 @@ plotROC <- function(data, refRats, title=NULL, legTitle='Ratio', ...)
                            score=score(data),
                            ratio=abs(round(ratio(data))))
     data <- data[!is.na(data$score),]
-    data <- data[data$label=='TP' | data$label=='FP',]
     data <- data[order(row.names(data)),]
 
+    data$label <- revalue(data$label, c('FP'='0', 'TP'='1'))
+    
+    data   <- data[data$label=='1' | data$label=='0',]
     ROCs   <- NULL
     AUCs   <- NULL
     ratios <- sort(data$ratio)
@@ -80,21 +82,21 @@ plotROC <- function(data, refRats, title=NULL, legTitle='Ratio', ...)
         if (length(unique(t$label)) == 1)
         {
             # No TP... Add a TP...
-            if (unique(t$label) == 'FP')
+            if (unique(t$label) == '0')
             {
-                t <- rbind(t, data.frame(label='TP', score=0, ratio=ratio))
+                t <- rbind(t, data.frame(label='1', score=0, ratio=ratio))
             }
             
             # No FP... Add a FP...
             else
             {
-                t <- rbind(t, data.frame(label='FP', score=0, ratio=ratio))
+                t <- rbind(t, data.frame(label='0', score=0, ratio=ratio))
             }
         }
         
         t <- t[with(t, order(score)),]
 
-        label <- ifelse(t$label == 'TP', 2, 1)
+        label <- ifelse(t$label == '1', 2, 1)
         preds <- prediction(t$score, label, label.ordering=c(1,2))
         perf  <- performance(preds, 'tpr', 'fpr')
         auc   <- performance(preds, 'auc')
