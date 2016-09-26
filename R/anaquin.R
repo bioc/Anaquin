@@ -1,7 +1,7 @@
 #
 #  Copyright (C) 2016 - Garvan Institute of Medical Research
 #
-#  Ted Wong, Garvan Institute
+#  Ted Wong, Bioinformatic Software Engineer at Garvan Institute
 #
 
 #
@@ -13,8 +13,9 @@
 #
 #   Supported analysis:
 #
-#     - plotLODR
-#     - plotROC
+#     - Mixture 
+#     - PlotROC
+#     - PlotLODR
 #     - PlotLinear
 #     - PlotLogistic
 #
@@ -29,14 +30,19 @@
     }
 
     # Expected analysis types
-    expAly = c('PlotLODR', 'PlotROC', 'PlotLinear', 'PlotLogistic',
-               'plotLODR', 'plotROC', 'plotLinear', 'plotLogistic')
+    expAly = c('PlotLODR', 'PlotROC', 'PlotLinear', 'PlotLogistic', 'Mixture',
+               'plotLODR', 'plotROC', 'plotLinear', 'plotLogistic', 'mixture')
 
     if (!(aly %in% expAly))
     {
         choices <- paste(expAly, collapse=', ')
         str <- c('Invalid analysis: ', aly, '. Should be {', choices, '}.')
         return (paste(str, sep = ""))
+    }
+    
+    if (aly == 'Mixture')
+    {
+        
     }
     
     if (aly == 'PlotLODR' | aly == 'plotLODR')
@@ -211,6 +217,10 @@ setGeneric('score',    function(object, ...) standardGeneric('score'))
 setGeneric('seqs',     function(object, ...) standardGeneric('seqs'))
 setGeneric('measured', function(object, ...) standardGeneric('measured'))
 setGeneric('analysis', function(object, ...) standardGeneric('analysis'))
+setGeneric('RnaQuin.genes',
+                       function(object, ...) standardGeneric('RnaQuin.genes'))
+setGeneric('RnaQuin.isoforms',
+                       function(object, ...) standardGeneric('RnaQuin.isoforms'))
 
 setMethod('std',      'AnaquinData', function(object) object@std)
 setMethod('pval',     'AnaquinData', function(object) object@pval)
@@ -223,22 +233,10 @@ setMethod('seqs',     'AnaquinData', function(object) object@seqs)
 setMethod('analysis', 'AnaquinData', function(object) object@analysis)
 setMethod('measured', 'AnaquinData', function(object) object@measured)
 
-#
-# Convert RnaQuin sequin isoforms to sequin genes. The inputs assumed be valid.
-#
-#    Eg: R1_1_1 to R1_1
-#
-isoformsToGenes <- function(names)
-{
-    names <- strsplit(names, '_')
-    
-    f <- function(x)
-    {
-        paste(x[1:length(x)-1], collapse='_')
-    }
-    
-    unlist(lapply(names, f))
-}
+setMethod('RnaQuin.genes',
+                      'AnaquinData', function(object) .RnaQuin.genes(object))
+setMethod('RnaQuin.isoforms',
+                      'AnaquinData', function(object) .RnaQuin.isoforms(object))
 
 .m2str <- function(m)
 {

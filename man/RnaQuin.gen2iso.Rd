@@ -1,15 +1,15 @@
-\name{isoformsToGenes}
-\alias{isoformsToGenes}
+\name{RnaQuin.gen2iso}
+\alias{RnaQuin.gen2iso}
+\alias{RnaQuin.gen2iso,AnaquinData-method}
 \title{Convert sequin isoforms to genes}
 \description{
-Convert RnaQuin sequin isoforms to genes. Due to alternative splicing,
-there will be smaller number of genes than isoforms.
+Convert RnaQuin sequin isoforms to genes.
 }
 \usage{
-isoformsToGenes(names)
+RnaQuin.gen2iso(names)
 }
 \arguments{
-  \item{names}{Isoform names}
+  \item{names}{Sequin isoform names}
 }
 \details{
 For example:
@@ -23,7 +23,7 @@ A list of RnaQuin sequin genes.
 }
 \examples{
 data(UserGuideData_5.4.5.1)
-isoformsToGenes(row.names(UserGuideData_5.4.5.1))
+RnaQuin.gen2iso(row.names(UserGuideData_5.4.5.1))
 }
 
 \author{Ted Wong \email{t.wong@garvan.org.au}}
