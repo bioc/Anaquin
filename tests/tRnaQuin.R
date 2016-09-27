@@ -12,9 +12,10 @@ test.RnaQuin.genes <- function()
     data(UserGuideData_5.4.5.1)
 
     data <- UserGuideData_5.4.5.1
-    anaquin <- new("AnaquinData", analysis = 'Mixture',
+    anaquin <- new("AnaquinData", analysis = 'PlotLinear',
                                       seqs = row.names(data),
-                                     input = log2(data$InputConcent))
+                                     input = log2(data$InputConcent),
+                                  measured = log2(data$InputConcent))
 
     r <- RnaQuin.genes(anaquin)
     

@@ -40,11 +40,6 @@
         return (paste(str, sep = ""))
     }
     
-    if (aly == 'Mixture')
-    {
-        
-    }
-    
     if (aly == 'PlotLODR' | aly == 'plotLODR')
     {
         if (is.null(ratio(object)))
@@ -194,13 +189,13 @@ setMethod("show",
                if (aly == 'PlotLinear')
                {
                    cat('- Use input(x) to get sequins \n', sep='')
-                   cat('- Use measured(x) to get sequins \n', sep='')
+                   cat('- Use measured(x) to get measurements \n', sep='')
                }
 
                if (aly == 'PlotLogistic')
                {
-                   cat('- Use input(x) to get sequins \n', sep='')
-                   cat('- Use measured(x) to get sequins \n', sep='')
+                   cat('- Use input(x) to get input concentration \n', sep='')
+                   cat('- Use measured(x) to get measurements \n', sep='')
                }
                
                cat('\nwhere x is your object name\n\n', sep='')

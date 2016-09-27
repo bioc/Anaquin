@@ -38,9 +38,14 @@ seqs <- row.names(data)
 # Input concentration
 input <- log2(data$InputConcent)
 
-anaquin <- new('AnaquinData', analysis = 'Mixture',
-                                  seqs = row.names(data),
-                                 input = log2(data$InputConcent))
+# Measured sensitivity
+measured <- data$Sn
+
+anaquin <- AnaquinData(analysis='PlotLogistic',
+                           seqs=seqs,
+                          input=input,
+                       measured=measured)
+
 RnaQuin.genes(anaquin)
 }
 
