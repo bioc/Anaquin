@@ -1,7 +1,7 @@
 #
 #  Copyright (C) 2016 - Garvan Institute of Medical Research
 #
-#  Ted Wong, Garvan Institute
+#  Ted Wong, Garvan Institute pf Medical Research
 #
 
 plotROC <- function(data, refRats, title=NULL, legTitle='Ratio', ...)

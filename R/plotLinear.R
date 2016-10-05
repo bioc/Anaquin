@@ -1,7 +1,7 @@
 #
 #  Copyright (C) 2016 - Garvan Institute of Medical Research
 #
-#  Ted Wong, Garvan Institute
+#  Ted Wong, Garvan Institute pf Medical Research
 #
 
 plotLinear <- function(data,
@@ -132,8 +132,10 @@ plotLinear <- function(data,
         p <- p + geom_segment(aes_string(x='data$x',
                                          y='data$ymax',
                                       xend='data$x',
-                                      yend='data$ymin'), data=data,
-                              size=0.2, alpha=0.5)
+                                      yend='data$ymin'),
+                              data=data,
+                              size=0.2,
+                              alpha=0.5)
     }
 
     y_off <- ifelse(max(data$y) - min(data$y) <= 10, 0.7, 0.7)
@@ -190,43 +192,33 @@ plotLinear <- function(data,
         }
     }
     
-    r <- abs(max(data$y) - min(data$y))
-    y_off <- 0.06 * r 
-
-    if (showLOQ)
-    {
-        a <- paste(c('bold(Overall): ', overall), collapse='')
-    }
-    else
-    {
-        a <- overall
-    }
-
-    overall <- annotate("text",
-                        label=a,
-                        x=min(data$x),
-                        y=max(data$y)-y_off,
-                        size=4.0,
-                        colour='grey24',
-                        parse=TRUE,
-                        hjust=0,
-                        vjust=0)
-    
-    p <- p + overall
-    
     if (showLOQ & !is.null(LOQ))
     {
-        above <- annotate("text",
-                          label=paste(c('bold(Above)~bold(LOQ): ',
-                                        above), collapse=''),
+        overall <- paste(c('bold(Overall): ', overall), collapse='')
+        above   <- paste(c('bold(Above)~bold(LOQ):', above), collapse='')
+        label   <- paste(c('atop(', overall, ',', above, ')'), collapse='')
+        
+        p <- p + annotate("text",
+                          label=label,
                           x=min(data$x),
-                          y=max(data$y)-2*y_off,
+                          y=max(data$y),
                           size=4.0,
                           colour='grey24',
                           parse=TRUE,
                           hjust=0,
-                          vjust=0)
-        p <- p + above
+                          vjust=1)
+    }
+    else
+    {
+        p <- p + annotate("text",
+                          label=overall,
+                          x=min(data$x),
+                          y=max(data$y),
+                          size=4.0,
+                          colour='grey24',
+                          parse=TRUE,
+                          hjust=0,
+                          vjust=1)
     }
 
     p <- .transformPlot(p)
