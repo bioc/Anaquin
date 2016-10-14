@@ -4,6 +4,7 @@
 #  Ted Wong, Bioinformatic Software Engineer at Garvan Institute
 #
 
+library(plyr)
 library(RUnit)
 library(Anaquin)
 
@@ -52,6 +53,36 @@ test.AnaquinData_PlotROC_1 <- function()
     checkEquals(row.names(data), seqs(anaquin))
 }
 
+test.AnaquinData_PlotROC_2 <- function()
+{
+    data(UserGuideData_5.6.3)
+    data <- UserGuideData_5.6.3
+
+    # Rename to invalid levels
+    data$Label <- revalue(as.factor(data$Label), c('TP'='??', 'FP'='!!'))
+    
+    checkException(new("AnaquinData", analysis = 'PlotROC',
+                                          seqs = row.names(data),
+                                         ratio = data$ExpLFC,
+                                         score = 1-data$Pval,
+                                         label = data$Label))
+}
+
+test.AnaquinData_PlotROC_3 <- function()
+{
+    data(UserGuideData_5.6.3)
+    data <- UserGuideData_5.6.3
+
+    # We can't use a numeric variable for labels...    
+    data$Label <- seq(1, nrow(data))
+    
+    checkException(new("AnaquinData", analysis = 'PlotROC',
+                       seqs = row.names(data),
+                       ratio = data$ExpLFC,
+                       score = 1-data$Pval,
+                       label = data$Label))
+}
+
 test.AnaquinData_PlotLogistic_1 <- function()
 {
     data(UserGuideData_5.4.5.1)
@@ -98,9 +129,14 @@ test.AnaquinData_PlotLODR_1 <- function()
     checkEquals(data$Qval, qval(anaquin))
 }
 
+test.AnaquinData_PlotROC_1()
+test.AnaquinData_PlotROC_2()
+test.AnaquinData_PlotROC_3()
+
+test.AnaquinData_PlotLODR_1()
+
 test.AnaquinData_PlotLinear_1()
 test.AnaquinData_PlotLinear_2()
-test.AnaquinData_PlotROC_1()
+
 test.AnaquinData_PlotLogistic_1()
 test.AnaquinData_PlotLogistic_2()
-test.AnaquinData_PlotLODR_1()

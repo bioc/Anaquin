@@ -1,7 +1,7 @@
 #
 #  Copyright (C) 2016 - Garvan Institute of Medical Research
 #
-#  Ted Wong, Garvan Institute pf Medical Research
+#  Ted Wong, Garvan Institute of Medical Research
 #
 
 .getLODR <- function(ratio, model, x, y, pval)

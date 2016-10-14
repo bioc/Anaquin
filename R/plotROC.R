@@ -1,7 +1,7 @@
 #
 #  Copyright (C) 2016 - Garvan Institute of Medical Research
 #
-#  Ted Wong, Garvan Institute pf Medical Research
+#  Ted Wong, Garvan Institute of Medical Research
 #
 
 plotROC <- function(data, refRats, title=NULL, legTitle='Ratio', ...)
@@ -23,10 +23,17 @@ plotROC <- function(data, refRats, title=NULL, legTitle='Ratio', ...)
     
     if (is.null(x$unitTest)) { x$unitTest <- FALSE }
     
+    ratio <- ratio(data)
+    
+    if (is.numeric(ratio))
+    {
+        ratio <- factor(abs(round(ratio)))
+    }
+    
     data <- data.frame(row.names=seqs(data),
                            label=label(data),
                            score=score(data),
-                           ratio=abs(round(ratio(data))))
+                           ratio=ratio)
     data <- data[!is.na(data$score),]
     data <- data[order(row.names(data)),]
 

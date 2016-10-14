@@ -1,26 +1,29 @@
 #
 #  Copyright (C) 2016 - Garvan Institute of Medical Research
 #
-#  Ted Wong, Garvan Institute pf Medical Research
+#  Ted Wong, Garvan Institute of Medical Research
 #
 
 #
-# Anaquin is a flexible framework for Bioinformatics, thus the data
+# Anaquin is a flexible framework for bioinformatics, thus the data
 # representation vary by analysis. The class representation lists all
-# the possible slots, however, only some of them will be needed for an
-# analysis. It's important to check R-man and vigenette on what inputs
+# the possible slots, however, only some of them will be needed for any
+# specific analysis. It's important to check the documentation on what inputs
 # are required.
 #
-#   Supported analysis:
-#
-#     - Mixture 
-#     - PlotROC
-#     - PlotLODR
-#     - PlotLinear
-#     - PlotLogistic
+#   - PlotROC
+#   - PlotLODR
+#   - PlotLinear
+#   - PlotLogistic
 #
 
-.validate = function(object)
+# Whether the classified labels are expected
+.verifyLabel <- function(x)
+{
+    return (all(levels(x) %in% c("FP", "TP"))) 
+}
+
+.validate <- function(object)
 {
     aly <- analysis(object)
 
@@ -78,7 +81,14 @@
         if (all(is.na(score(object))))
         {
             return ('PlotROC requires scoring for ranking.
-                     Please specifiy it with "score"') }
+                     Please specifiy it with "score"')
+        }
+        
+        if (!.verifyLabel(label(object)))
+        {
+            return ('PlotROC requires input labels are only \'TP\'
+                     or \'FP\'')
+        }
     }
 
     if (aly == 'PlotLinear' | aly == 'plotLinear')
@@ -134,7 +144,7 @@ setClassUnion("data.frameORvectorOrNULL", c("data.frame", "vector", "NULL"))
 #' @slot ratio    Sequin ratio
 #' @slot input    Input concentration (attomol/ul)
 #' @slot measured Measured abundance (eg: FPKM)
-#' @slot label    Classified label (eg: 'TP'/'FP')
+#' @slot label    Classified label ('TP'/'FP')
 #' @slot score    Scoring for ROC
 
 setClass("AnaquinData", representation(analysis = 'character',
