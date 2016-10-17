@@ -140,7 +140,7 @@ anaquin <- AnaquinData(analysis='PlotLinear',
                           input=input,
                        measured=sim2)
 
-title <- 'Isoform expression (Good)'
+title <- 'Isoform expression (Bad)'
 xlab  <- 'Input concentration (log2)'
 ylab  <- 'Measured FPKM (log2)'
 
