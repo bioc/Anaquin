@@ -46,15 +46,12 @@ plotLogistic <- function(data,
         # Fit a sigmoid curve to the data, equivalent to logistic regression.
         #
         
-        perf <- min(data[data$y >= 1.00,]$x)
-        
         t <- data
-        t <- t[t$x <= perf | t$y > 0,]
         x <- t$x
         y <- t$y
         
-        fitmodel <- nls(y~a/(1 + exp(-b * (x-c))), start=list(a=1,b=1,c=0))
-        params=coef(fitmodel)
+        fit <- nls(y~a/(1 + exp(-b * (x-c))), start=list(a=1,b=1,c=0))
+        params <- coef(fit)
         
         data$f <- sigmoid(params, data$x)
     }, error = function(e) {
