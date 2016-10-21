@@ -39,21 +39,15 @@ plotLogistic <- function(data,
     result = tryCatch(
     {
         sigmoid = function(params, x) {
-            params[1] / (1 + exp(-params[2] * (x - params[3])))
+            1 / (1 + exp(-params[1] * (x - params[2])))
         }
         
-        #
-        # Fit a sigmoid curve to the data, equivalent to logistic regression.
-        #
+        x <- data$x
+        y <- data$y
         
-        t <- data
-        x <- t$x
-        y <- t$y
+        fit <- nls(y~1/(1 + exp(-b * (x-c))), start=list(b=1,c=0))
         
-        fit <- nls(y~a/(1 + exp(-b * (x-c))), start=list(a=1,b=1,c=0))
-        params <- coef(fit)
-        
-        data$f <- sigmoid(params, data$x)
+        data$f <- sigmoid(coef(fit), x)
     }, error = function(e) {
         showLOA <<- FALSE
     })
