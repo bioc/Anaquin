@@ -1,8 +1,8 @@
 Package: Anaquin
 Type: Package
 Title: Statistical analysis of sequins
-Version: 1.1.0
-Date: 2016-10-05
+Version: 1.1.1
+Date: 2016-11-07
 Author: Ted Wong
 Maintainer: Ted Wong <t.wong@garvan.org.au>
 Description: The project is intended to support the use of sequins (synthetic sequencing spike-in controls) owned and made available by the Garvan Institute of Medical Research. The goal is to provide a standard open source library for quantitative analysis, modelling and visualization of spike-in controls.
