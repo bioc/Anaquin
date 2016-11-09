@@ -1,7 +1,7 @@
 Package: Anaquin
 Type: Package
 Title: Statistical analysis of sequins
-Version: 1.1.1
+Version: 1.1.2
 Date: 2016-11-07
 Author: Ted Wong
 Maintainer: Ted Wong <t.wong@garvan.org.au>
@@ -10,7 +10,7 @@ License: BSD_3_clause + file LICENSE
 VignetteBuilder: knitr
 URL: www.sequin.xyz
 Depends: R (>= 3.3)
-Imports: ggplot2, ROCR, knitr, qvalue, locfit, methods, stats, utils, plyr
+Imports: ggplot2, ROCR, knitr, qvalue, locfit, methods, stats, utils, plyr, DESeq2
 Suggests: RUnit, rmarkdown
 VignetteBuilder: knitr
 BugReports: https://github.com/student-t/RAnaquin/issues

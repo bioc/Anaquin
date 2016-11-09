@@ -6,11 +6,12 @@
 
 #
 # Anaquin is a flexible framework for bioinformatics, thus the data
-# representation vary by analysis. The class representation lists all
-# the possible slots, however, only some of them will be needed for any
-# specific analysis. It's important to check the documentation on what inputs
-# are required.
+# representation vary by analysis. The class representation shows all
+# possible slots, however, only some of them will be needed for any specific
+# analysis. It's important to check the documentation on what inputs are
+# required.
 #
+#   - PlotMA
 #   - PlotROC
 #   - PlotLODR
 #   - PlotLinear
@@ -33,14 +34,29 @@
     }
 
     # Expected analysis types
-    expAly = c('PlotLODR', 'PlotROC', 'PlotLinear', 'PlotLogistic', 'Mixture',
-               'plotLODR', 'plotROC', 'plotLinear', 'plotLogistic', 'mixture')
+    expAly = c('PlotLODR', 'PlotROC', 'PlotLinear', 'PlotLogistic', 'plotMA',
+               'plotLODR', 'plotROC', 'plotLinear', 'plotLogistic', 'PlotMA')
 
     if (!(aly %in% expAly))
     {
         choices <- paste(expAly, collapse=', ')
         str <- c('Invalid analysis: ', aly, '. Should be {', choices, '}.')
         return (paste(str, sep = ""))
+    }
+    
+    if (aly == 'PlotMA' | aly == 'plotMA')
+    {
+        if (is.null(mean(object)))
+        {
+            return ('PlotMA requires replicate means (x-axis).
+                    Please specifiy it with "mean"')
+        }
+        
+        if (is.null(lfc(object)))
+        { 
+            return ('PlotMA requires log-fold change (y-axis).
+                    Please specifiy it with "lfc"')
+        }
     }
     
     if (aly == 'PlotLODR' | aly == 'plotLODR')
@@ -138,14 +154,16 @@ setClassUnion("data.frameORvectorOrNULL", c("data.frame", "vector", "NULL"))
 #'
 #' @slot analysis Analysis type
 #' @slot seqs     Sequin names
+#' @slot ratio    Sequin ratio
+#' @slot input    Sequin concentration (attomol/ul)
 #' @slot std      Standard deviation
 #' @slot pval     P-value probability
 #' @slot qval     Q-value probability
-#' @slot ratio    Sequin ratio
-#' @slot input    Input concentration (attomol/ul)
 #' @slot measured Measured abundance (eg: FPKM)
 #' @slot label    Classified label ('TP'/'FP')
 #' @slot score    Scoring for ROC
+#' @slot mean     Mean (eg: baseMean in DESeq2)
+#' @slot lfc      Log-fold change (eg: differential analysis)
 
 setClass("AnaquinData", representation(analysis = 'character',
                                        seqs     = 'factorOrNULL',
@@ -156,7 +174,9 @@ setClass("AnaquinData", representation(analysis = 'character',
                                        input    = 'numericOrNULL',
                                        measured = 'data.frameORvectorOrNULL',
                                        label    = 'factorOrNULL',
-                                       score    = 'numericOrNULL'),
+                                       score    = 'numericOrNULL',
+                                       mean     = 'numericOrNULL',
+                                       lfc      = 'numericOrNULL'),
                           prototype(std         = NULL,
                                     pval        = NULL,
                                     qval        = NULL,
@@ -164,7 +184,9 @@ setClass("AnaquinData", representation(analysis = 'character',
                                     input       = NULL,
                                     measured    = NULL,
                                     label       = NULL,
-                                    score       = NULL),
+                                    score       = NULL,
+                                    mean        = NULL,
+                                    lfc         = NULL),
                         validity = .validate)
 
 AnaquinData <- function(analysis, ...)
@@ -182,27 +204,29 @@ setMethod("show",
                cat('Number of sequins: ', length(seqs(object)), '\n\n', sep='')
                cat('- Use seqs(x) to get sequins \n', sep='')
                
-               if (aly == 'PlotLODR')
+               if (aly == 'PlotMA')
+               {
+                   cat('- Use mean(x) to get means \n', sep='')
+                   cat('- Use lfc(x) to get log-fold ratio \n', sep='')
+               }
+               else if (aly == 'PlotLODR')
                {
                      cat('- Use ratio(x) to get expected ratios \n', sep='')
                      cat('- Use score(x) to get measurement \n', sep='')
                      cat('- Use label(x) to get p-value \n', sep='')
                }
-
-               if (aly == 'PlotROC')
+               else if (aly == 'PlotROC')
                {
                      cat('- Use ratio(x) to get expected ratios \n', sep='')
                      cat('- Use score(x) to get scores \n', sep='')
                      cat('- Use label(x) to get labels \n', sep='')
                }
-               
-               if (aly == 'PlotLinear')
+               else if (aly == 'PlotLinear')
                {
                    cat('- Use input(x) to get sequins \n', sep='')
                    cat('- Use measured(x) to get measurements \n', sep='')
                }
-
-               if (aly == 'PlotLogistic')
+               else if (aly == 'PlotLogistic')
                {
                    cat('- Use input(x) to get input concentration \n', sep='')
                    cat('- Use measured(x) to get measurements \n', sep='')
@@ -212,36 +236,31 @@ setMethod("show",
                invisible(NULL)
            })
 
+setGeneric('lfc',      function(object, ...) standardGeneric('lfc'))
 setGeneric('std',      function(object, ...) standardGeneric('std'))
 setGeneric('pval',     function(object, ...) standardGeneric('pval'))
 setGeneric('qval',     function(object, ...) standardGeneric('qval'))
+setGeneric('seqs',     function(object, ...) standardGeneric('seqs'))
+setGeneric('mean',     function(object, ...) standardGeneric('mean'))
 setGeneric('ratio',    function(object, ...) standardGeneric('ratio'))
 setGeneric('input',    function(object, ...) standardGeneric('input'))
 setGeneric('label',    function(object, ...) standardGeneric('label'))
 setGeneric('score',    function(object, ...) standardGeneric('score'))
-setGeneric('seqs',     function(object, ...) standardGeneric('seqs'))
 setGeneric('measured', function(object, ...) standardGeneric('measured'))
 setGeneric('analysis', function(object, ...) standardGeneric('analysis'))
-setGeneric('RnaQuin.genes',
-                       function(object, ...) standardGeneric('RnaQuin.genes'))
-setGeneric('RnaQuin.isoforms',
-                       function(object, ...) standardGeneric('RnaQuin.isoforms'))
 
+setMethod('lfc',      'AnaquinData', function(object) object@lfc)
 setMethod('std',      'AnaquinData', function(object) object@std)
 setMethod('pval',     'AnaquinData', function(object) object@pval)
 setMethod('qval',     'AnaquinData', function(object) object@qval)
+setMethod('seqs',     'AnaquinData', function(object) object@seqs)
+setMethod('mean',     'AnaquinData', function(object) object@mean)
 setMethod('ratio',    'AnaquinData', function(object) object@ratio)
 setMethod('input',    'AnaquinData', function(object) object@input)
 setMethod('label',    'AnaquinData', function(object) object@label)
 setMethod('score',    'AnaquinData', function(object) object@score)
-setMethod('seqs',     'AnaquinData', function(object) object@seqs)
 setMethod('analysis', 'AnaquinData', function(object) object@analysis)
 setMethod('measured', 'AnaquinData', function(object) object@measured)
-
-setMethod('RnaQuin.genes',
-                      'AnaquinData', function(object) .RnaQuin.genes(object))
-setMethod('RnaQuin.isoforms',
-                      'AnaquinData', function(object) .RnaQuin.isoforms(object))
 
 .m2str <- function(m)
 {

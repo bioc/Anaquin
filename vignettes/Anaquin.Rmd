@@ -86,8 +86,8 @@ file (you can also download the file directly from our website):
 
 ```{r}
 library('Anaquin')
-data(mixtureA)
-head(mixtureA)
+data(MixtureA)
+head(MixtureA)
 ```
 
 Each row represents a sequin. *Column ID* gives the sequin names, *Length*
@@ -101,9 +101,9 @@ Let's simulate the experiments:
 
 ```{r}
 set.seed(1234)
-sim1 <- 1.0 + 1.2*log2(mixtureA$MXA) + rnorm(nrow(mixtureA),0,1)
+sim1 <- 1.0 + 1.2*log2(MixtureA$MXA) + rnorm(nrow(MixtureA),0,1)
 sim2 <- c(1.0 + rnorm(100,1,3), 1.0 +
-          1.2*log2(tail(mixtureA,64)$MXA) +
+          1.2*log2(tail(MixtureA,64)$MXA) +
           rnorm(64,0,1))
 ```
 
@@ -111,8 +111,8 @@ In the first experiment, sequins are expected to correlate linearly with the
 measured FPKM. Indeed, the variables are strongly correlated:
 
 ```{r, message=FALSE, results='hide', fig.align='center'}
-names <- row.names(mixtureA)
-input <- log2(mixtureA$MXA)
+names <- row.names(MixtureA)
+input <- log2(MixtureA$MXA)
 
 anaquin <- AnaquinData(analysis='PlotLinear',
                            seqs=names,
@@ -132,8 +132,8 @@ there is a limit of quantification (LOQ); below which accuracy of the
 experiment becomes questionable.
 
 ```{r, message=FALSE, results='hide', fig.align='center'}
-names <- row.names(mixtureA)
-input <- log2(mixtureA$MXA)
+names <- row.names(MixtureA)
+input <- log2(MixtureA$MXA)
 
 anaquin <- AnaquinData(analysis='PlotLinear',
                            seqs=names,

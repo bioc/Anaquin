@@ -4,31 +4,23 @@
 #  Ted Wong, Garvan Institute of Medical Research
 #
 
-.RnaQuin.isoforms <- function(object)
+#
+# Filter RnaQuin genes from a list of genes names.
+#
+RnaQuin.genes <- function(genes)
 {
-    return (data.frame(row.names=seqs(object), Mix=input(object)))
-}
-
-.RnaQuin.genes <- function(object)
-{
-    data <- data.frame(ID=seqs(object), Mix=input(object))
-
-    # Convert isoforms to genes
-    data$ID <- RnaQuin.gen2iso(data$ID)
-    
-    # Aggregate isoforms into genes    
-    return (aggregate(Mix~ID, data=data, FUN=sum))
+    data('MixtureA')
+    genes[genes %in% RnaQuin.iso2gen(row.names(MixtureA))]
 }
 
 #
-# Convert RnaQuin sequin isoforms to sequin genes. The inputs assumed be valid.
+# Convert RnaQuin sequin isoforms to sequin genes.
 #
 #    Eg: R1_1_1 to R1_1
 #
-RnaQuin.gen2iso <- function(names)
+RnaQuin.iso2gen <- function(names)
 {
-    names <- as.character(names)
-    names <- strsplit(names, '_')
+    names <- strsplit(as.character(names), '_')
     
     f <- function(x)
     {
