@@ -12,6 +12,7 @@ plotLinear <- function(data,
                      showLOQ=TRUE,
                      xBreaks=NULL,
                      yBreaks=NULL,
+                      errors=NULL,
                     showAxis=FALSE, ...)
 {
     stopifnot(class(data) == 'AnaquinData')
@@ -23,6 +24,8 @@ plotLinear <- function(data,
         stop('plotLinear requires PlotLinear analysis')
     }
 
+    stopifnot(is.null(errors) | errors == 'SD' | errors == 'Range')
+    
     stopifnot(!is.null(seqs(data)))
     stopifnot(!is.null(input(data)))
     stopifnot(!is.null(measured(data)))
@@ -83,7 +86,11 @@ plotLinear <- function(data,
         {
             data$sd <- apply(data$y, 1, sd, na.rm=TRUE)
         }
-        
+
+        data$min <- do.call(pmin, as.data.frame(data$y))
+        data$max <- do.call(pmax, as.data.frame(data$y))
+        data$TMP <- data$y
+                
         data$y  <- rowMeans(data$y, na.rm=TRUE)
     }
     else
@@ -94,15 +101,31 @@ plotLinear <- function(data,
     if (isMulti)
     {
         #
-        # There're different types of error bars; SD, SE and CI. Here, we're more intersted in
-        # the variation in the data, so we'll implement the SD method.
+        # Quote from: "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2064100"
         #
-        
-        data$ymax <- data$y + 2*data$sd
-        data$ymin <- data$y - 2*data$sd
-        
+        #   About two thirds of the data points will lie within the region of
+        #   mean ± 1 SD, and ∼95% of the data points will be within 2 SD of
+        #   the mean.
+        #
+        # We want to establish a 95% confidence interval.
+        #
+        if (is.null(errors) || errors == 'SD')
+        {
+            data$ymax <- data$y + 2*data$sd
+            data$ymin <- data$y - 2*data$sd
+        }
+
+        #
+        # Range error encompass the lowest and highest values
+        #
+        else if (errors == 'Range')
+        {
+            data$ymax <- data$max
+            data$ymin <- data$min
+        }
+
         data <- data[!is.na(data$ymax),]
-        data <- data[!is.na(data$ymin),]        
+        data <- data[!is.na(data$ymin),]    
     }
     else
     {

@@ -6,7 +6,7 @@ Create a scatter plot with expected abundance on the x-axis, and measured
 abundance on the y-axis.
 }
 \usage{
-plotLinear(data, title, xlab, ylab, showSD, showLOQ, xBreaks, yBreaks, showAxis, ...)
+plotLinear(data, title, xlab, ylab, showSD, showLOQ, xBreaks, yBreaks, errors, showAxis, ...)
 }
 \arguments{
   \item{data}{Anaquin dataset created by \code{AnaquinData}. It needs to define
@@ -19,6 +19,7 @@ plotLinear(data, title, xlab, ylab, showSD, showLOQ, xBreaks, yBreaks, showAxis,
   \item{showSD}{Show standard deviation bars vertically? Default to
                 \code{TRUE}.}
   \item{showLOQ}{Show limit-of-quantification? Default to \code{TRUE}.}
+  \item{errors}{How errors bar should be calculated. \code{SD} or \code{Range}}
   \item{showAxis}{Show x-axis and y-axis? Default to \code{TRUE}.}
   \item{...}{Reserved for internal testing}  
 }
