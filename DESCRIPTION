@@ -9,7 +9,7 @@ Description: The project is intended to support the use of sequins (synthetic se
 License: BSD_3_clause + file LICENSE
 VignetteBuilder: knitr
 URL: www.sequin.xyz
-Depends: R (>= 3.3)
+Depends: R (>= 3.3), ggplot2 (>= 2.2.0)
 Imports: ggplot2, ROCR, knitr, qvalue, locfit, methods, stats, utils, plyr, DESeq2
 Suggests: RUnit, rmarkdown
 VignetteBuilder: knitr

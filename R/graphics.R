@@ -19,10 +19,15 @@
     
     build <- ggplot_build(p)
     
-    minX <- build$panel$ranges[[1]]$x.range[[1]]
-    maxX <- build$panel$ranges[[1]]$x.range[[2]]
-    minY <- build$panel$ranges[[1]]$y.range[[1]]
-    maxY <- build$panel$ranges[[1]]$y.range[[2]]
+    minX <- build$layout$panel_ranges[[1]]$x.range[[1]]
+    maxX <- build$layout$panel_ranges[[1]]$x.range[[2]]
+    minY <- build$layout$panel_ranges[[1]]$y.range[[1]]
+    maxY <- build$layout$panel_ranges[[1]]$y.range[[2]]
+    
+    stopifnot(!is.null(minX))
+    stopifnot(!is.null(maxX))
+    stopifnot(!is.null(minY))
+    stopifnot(!is.null(maxY))    
     
     xrange <- maxX - minX
     yrange <- maxY - minY
