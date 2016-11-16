@@ -5,12 +5,39 @@
 #
 
 #
+# Implements functionality related to RnaQuin
+#
+
+#
+# Aggregate isoform concentration for genes
+#
+RnaQuin.aggregate <- function(isos, concent)
+{
+    data <- data.frame(ID=isos, Mix=concent)
+    
+    # Convert isoforms to genes
+    data$ID <- RnaQuin.iso2gen(data$ID)
+    
+    # Aggregate isoforms into genes    
+    return (aggregate(Mix~ID, data=data, FUN=sum))
+}
+
+#
 # Filter RnaQuin genes from a list of genes names.
 #
 RnaQuin.genes <- function(genes)
 {
-    data('MixtureA')
-    genes[genes %in% RnaQuin.iso2gen(row.names(MixtureA))]
+    data('RnaQuinMixtureA')
+    genes[genes %in% RnaQuin.iso2gen(RnaQuinMixtureA$ID)]
+}
+
+#
+# Filter RnaQuin isoforms from a list of isoform names.
+#
+RnaQuin.isoforms <- function(isos)
+{
+    data('RnaQuinMixtureA')
+    isos[isos %in% RnaQuinMixtureA$ID]
 }
 
 #
@@ -18,14 +45,10 @@ RnaQuin.genes <- function(genes)
 #
 #    Eg: R1_1_1 to R1_1
 #
-RnaQuin.iso2gen <- function(names)
+RnaQuin.iso2gen <- function(isos)
 {
-    names <- strsplit(as.character(names), '_')
-    
-    f <- function(x)
+    unlist(lapply(strsplit(as.character(isos), '_'),  function(x)
     {
         paste(x[1:length(x)-1], collapse='_')
-    }
-    
-    unlist(lapply(names, f))
+    }))
 }
