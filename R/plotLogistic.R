@@ -56,7 +56,9 @@ plotLogistic <- function(data,
                         xlab(xlab) +
                         ylab(ylab) +
                     ggtitle(title) +
-                        theme_bw()
+                        theme_bw() +
+                        theme(plot.title = element_text(hjust = 0.5))
+
     p <- p + geom_point(aes_string(y='y', colour='grp'), size=2.0, alpha=0.5)
 
     if (!all(is.na(data$f)))

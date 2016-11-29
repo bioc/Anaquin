@@ -136,8 +136,9 @@
     p  <- ggplot(df, aes_string(x='measured', y='pval', colour='ratio')) +
                          geom_point(size=3, alpha=0.5)                   +
                          labs(colour=legTitle)                           +
-                         theme_bw()
-
+                         theme_bw()                                      +
+                         theme(plot.title = element_text(hjust = 0.5))
+    
     if (!is.null(xlab))     { p <- p + xlab(xlab)            }
     if (!is.null(ylab))     { p <- p + ylab(ylab)            }
     if (!is.null(title))    { p <- p + ggtitle(title)        }

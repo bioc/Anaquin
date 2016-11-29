@@ -119,9 +119,10 @@ plotROC <- function(data, refRats, title=NULL, legTitle='Ratio', ...)
     p <- ggplot(data=ROCs, aes_string(x='FPR', y='TPR'))             + 
             geom_abline(intercept=0, slope=1, linetype=2)            +
             geom_path(size=1, aes_string(colour='ratio'), alpha=0.5) +
-            labs(colour=legTitle)                                  +
-            theme_bw()
-
+            labs(colour=legTitle)                                    +
+            theme_bw()                                               +
+            theme(plot.title = element_text(hjust = 0.5))
+    
     if (!is.null(title))
     {
         p <- p + ggtitle(title)

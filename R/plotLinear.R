@@ -148,8 +148,10 @@ plotLinear <- function(data,
                              color='black',
                               size=0.5)  +
                     guides(colour=FALSE) +
-                theme_bw()
-
+          ylim(min(data$y), max(data$y)) +
+                              theme_bw() +
+        theme(plot.title = element_text(hjust = 0.5))
+        
     if (showSD & !is.null(data$sd))
     {
         p <- p + geom_segment(aes_string(x='data$x',
@@ -245,7 +247,7 @@ plotLinear <- function(data,
     }
 
     p <- .transformPlot(p)
-    print(p)
+    suppressWarnings(print(p))
     
     if (z$unitTest)
     {
