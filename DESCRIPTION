@@ -1,7 +1,7 @@
 Package: Anaquin
 Type: Package
 Title: Statistical analysis of sequins
-Version: 1.1.7
+Version: 1.2.0
 Date: 2016-11-24
 Author: Ted Wong
 Maintainer: Ted Wong <t.wong@garvan.org.au>
