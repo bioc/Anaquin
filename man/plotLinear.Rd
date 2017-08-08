@@ -2,45 +2,35 @@
 \alias{plotLinear}
 \title{Plot linear model for sequins}
 \description{
-Create a scatter plot with expected abundance on the x-axis, and measured
-abundance on the y-axis.
+Create linear model for sequins, between input concentation on the x-axis and
+measurment on the y-axis.
 }
 \usage{
-plotLinear(data, title, xlab, ylab, showSD, showLOQ, xBreaks, yBreaks, errors,
-showAxis, ...)
+plotLinear(seqs, x, y, std, title, xlab, ylab, showSD, showLOQ, showStats,
+           xBreaks, yBreaks, errors, showLinear, showAxis)
 }
 \arguments{
-  \item{data}{Anaquin dataset created by \code{AnaquinData}. It needs to define
-              information in \bold{Details}.}
-  \item{title}{Label of the plot.}
-  \item{xlab}{Label for the x-axis}
-  \item{ylab}{Label for the y-axis}
-  \item{xBreaks}{Breaks for the x-axis}
-  \item{yBreaks}{Breaks for the y-axis}
-  \item{showSD}{Show standard deviation bars vertically? Default to
-                \code{TRUE}.}
-  \item{showLOQ}{Show limit-of-quantification? Default to \code{TRUE}.}
-  \item{errors}{How errors bar should be calculated. \code{SD} or \code{Range}}
-  \item{showAxis}{Show x-axis and y-axis? Default to \code{TRUE}.}
-  \item{...}{Reserved for internal testing}  
-}
-\value{
-The functions does not return anything but it prints a scatter plot.
+  \item{seqs}{Sequin names}
+  \item{x}{Input concentration on the x-axis}
+  \item{y}{Measurement on the y-axis}
+  \item{std}{Standard deviation. (Default to \code{NULL}).}  
+  \item{title}{Label of the plot. (Default to \code{NULL}).}
+  \item{xlab}{Label for the x-axis. (Default to \code{NULL}).}
+  \item{ylab}{Label for the y-axis. (Default to \code{NULL}).}
+  \item{xBreaks}{Breaks for the x-axis. (Default to \code{NULL}).}
+  \item{yBreaks}{Breaks for the y-axis. (Default to \code{NULL}).}
+  \item{showSD}{Display vertical standard deviation bars. (Default to \code{FALSE}).}
+  \item{showLOQ}{Display limit-of-quantification? Default to \code{TRUE}.}
+  \item{showStats}{Display regression statistics? Default to \code{TRUE}.}  
+  \item{errors}{How errors bar should be calculated. \code{SD} or \code{Range}.}
+  \item{showLinear}{Display regression line. (Default to \code{TRUE}).}
+  \item{showAxis}{Display x-axis and y-axis. (Default to \code{TRUE}).}
 }
 \details{
-
-\code{plotLinear} requires the following data inputs from \code{AnaquinData}.
-
-\tabular{rlll}{
-    \tab \code{seqs}   \tab List of sequin identifiers (eg. R2_11_2).\cr
-    \tab \code{input}   \tab Input concentration of sequins in attomol/ul.\cr
-    \tab \code{measured} \tab Measured abundance of sequins (typically FPKM).\cr
-}
-
-The \code{plotLinear} function plots a scatter plot with expected abundance on
-the x-axis, and measured abundance on the y-axis. The expected abundance is
-typically the input concentration of sequins in the mixture, although other
-measures (such as expected allele frequency) are also possible. The function
+The \code{plotLinear} function plots a scatter plot with input concentration on
+the x-axis, and measurement on the y-axis. The input concentration is
+typically the concentration level in ladder mixture, although other
+measures (such as expected copy number) are also possible. The function
 builds a linear regression between the two variables, and reports associated
 statistics (R2, correlation and regression parameters) on the plot.
 
@@ -51,7 +41,9 @@ LOQ is estimated by fitting segmented linear regression with two segments
 on the entire data set, while minimizing the total sum of squares of the
 differences between the variables. 
 }
-
+\value{
+The function prints a scatter plot and return it's LOQ statistics.
+}
 \examples{
 library(Anaquin)
 
@@ -69,17 +61,12 @@ ylab  <- 'FPKM (log2)'
 seqs <- row.names(UserGuideData_5.4.6.3)
 
 # Input concentration
-input <- log2(UserGuideData_5.4.6.3$InputConcent)
+x <- log2(UserGuideData_5.4.6.3$Input)
 
 # Measured FPKM
-measured <- log2(UserGuideData_5.4.6.3[,2:4])
+y <- log2(UserGuideData_5.4.6.3[,2:4])
 
-anaquin <- AnaquinData(analysis='PlotLinear',
-                           seqs=seqs,
-                          input=input,
-                       measured=measured)
-
-plotLinear(anaquin, title=title, xlab=xlab, ylab=ylab, showLOQ=TRUE)
+plotLinear(seqs, x, y, title=title, xlab=xlab, ylab=ylab, showLOQ=TRUE)
 }
 
 \author{Ted Wong \email{t.wong@garvan.org.au}}

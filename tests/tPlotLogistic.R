@@ -10,14 +10,11 @@ library(Anaquin)
 test.PlotLogistic_1 <- function()
 {
     data(UserGuideData_5.4.5.1)
-    
-    data <- UserGuideData_5.4.5.1
-    data <- AnaquinData(analysis='PlotLogistic',
-                            seqs=row.names(data),
-                           input=log2(data$InputConcent),
-                        measured=data$Sn)
+    x <- UserGuideData_5.4.5.1
 
-    r <- plotLogistic(data, unitTest=TRUE)
+    r <- plotLogistic(row.names(x),
+                      log2(x$Input),
+                      x$Sn)
 
     # Expected fitted values by the sigmoid function
     fitted <- c(0.505755856395065,
@@ -192,14 +189,11 @@ test.PlotLogistic_1 <- function()
 test.PlotLogistic_2 <- function()
 {
     data(UserGuideData_5.4.6.3)
-      
-    data <- UserGuideData_5.4.6.3
-    data <- AnaquinData(analysis='PlotLinear',
-                            seqs=row.names(data),
-                           input=log2(data$InputConcent),
-                        measured=log2(data$Observed1))
+    x <- UserGuideData_5.4.6.3
 
-    checkException(plotLogistic(data, unitTest=TRUE))
+    checkException(plotLogistic(row.names(data),
+                                log2(data$Input),
+                                log2(data$Observed1)))
 }
 
 test.PlotLogistic_1()

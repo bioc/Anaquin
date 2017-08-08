@@ -1,12 +1,10 @@
 #
-#  Copyright (C) 2016 - Garvan Institute of Medical Research
-#
-#  Ted Wong, Garvan Institute of Medical Research
+#  Copyright (C) 2017 - Garvan Institute of Medical Research
 #
 
 #
 # Limit-of-quantification (LOQ) is defined as the level of concentration where
-# accurate interpreation starts becoming questionable.
+# accurate interpreation becomes questionable.
 #
 
 estimateLOQ <- function(x, y, showDetails=FALSE)

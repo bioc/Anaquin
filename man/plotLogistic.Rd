@@ -6,35 +6,26 @@ Create a scatter plot with input concentration on the x-axis, and measured
 proportion on the y-axis.
 }
 \usage{
-plotLogistic(data, title, xlab, ylab, showLOA, threshold, ...)
+plotLogistic(seqs, x, y, title, xlab, ylab, showLOA, threshold)
 }
 \arguments{
-  \item{data}{Anaquin dataset created by \code{AnaquinData}. It needs to define
-              information in \bold{Details}.}
+  \item{seqs}{Sequin names}
+  \item{x}{Expected input concentration on the x-axis}
+  \item{y}{Measured proportion on the y-axis}
   \item{title}{Title of the plot. (Default to NULL).}
   \item{xlab}{Label for the x-axis. (Default to NULL).}
   \item{ylab}{Label for the y-axis. (Default to NULL).}
   \item{showLOA}{Display limit-of-assembly. (Default to TRUE).}
-  \item{threshold}{Threshold required for limit-of-assembly (LOA)}
-  \item{...}{Reserved for internal testing}
+  \item{threshold}{Threshold required for limit-of-assembly (LOA). (Default to 0.7).}
 }
 \value{
-The functions does not return anything but it prints a scatter plot with a
-fitted logistic function.
+The function returns the limit of quantification.
 }
 \details{
-\code{plotLogistic} requires the following data inputs from \code{AnaquinData}.
-
-\tabular{rlll}{
-    \tab \code{seqs}     \tab List of sequin identifiers (eg. R2_11_2).\cr
-    \tab \code{input}    \tab Input concentration of sequins in attomol/ul.\cr
-    \tab \code{measured} \tab Measured variable (eg: sensitivity).\cr
-}
-
 The \code{plotLogistic} function creates a scatter plot with input
 concentration on the x-axis, and measured proportion on the y-axis. Common
 measured statistics include p-value, percentage and sensitivity. The plot
-builds a GLM logistic regression model between the two variables.
+builds a logistic regression model between the two variables.
 
 The function also estimates limit-of-assembly (LOA) breakpoint, and reports it
 on the plot if found. The LOA breakpoint is an empirical detection limit, and
@@ -59,17 +50,12 @@ ylab  <- 'Sensitivity'
 seqs <- row.names(UserGuideData_5.4.5.1)
 
 # Input concentration
-input <- log2(UserGuideData_5.4.5.1$InputConcent)
+x <- log2(UserGuideData_5.4.5.1$Input)
 
 # Measured sensitivity
-measured <- UserGuideData_5.4.5.1$Sn
+y <- UserGuideData_5.4.5.1$Sn
 
-anaquin <- AnaquinData(analysis='PlotLogistic',
-                           seqs=seqs,
-                          input=input,
-                       measured=measured)
-
-plotLogistic(anaquin, title=title, xlab=xlab, ylab=ylab, showLOA=TRUE)
+plotLogistic(seqs, x, y, title=title, xlab=xlab, ylab=ylab, showLOA=TRUE)
 }
 
 \author{Ted Wong \email{t.wong@garvan.org.au}}

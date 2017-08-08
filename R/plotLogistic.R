@@ -1,36 +1,20 @@
 #
-#  Copyright (C) 2016 - Garvan Institute of Medical Research
-#
-#  Ted Wong, Garvan Institute of Medical Research
+#  Copyright (C) 2017 - Garvan Institute of Medical Research
 #
 
-plotLogistic <- function(data,
+plotLogistic <- function(seqs,
+                         x,
+                         y,
                          title=NULL,
                           xlab=NULL,
                           ylab=NULL,
                        showLOA=TRUE,
-                     threshold=0.70, ...)
+                     threshold=0.70)
 {
-    stopifnot(class(data) == 'AnaquinData')
-
-    if (analysis(data) != 'PlotLogistic' &
-        analysis(data) != 'plotLogistic')
-    {
-        stop('plotLogistic requires PlotLogistic analysis')
-    }
-      
-    stopifnot(!is.null(seqs(data)))
-    stopifnot(!is.null(input(data)))
-    stopifnot(!is.null(measured(data)))
-
-    z <- list(...)
-    
-    if (is.null(z$unitTest)) { z$unitTest <- FALSE }
-
-    data <- data.frame(x=input(data),
-                       y=measured(data),
+    data <- data.frame(x=x,
+                       y=y,
                        f=NA,
-                       grp=as.factor(round(abs(input(data)))))
+                       grp=as.factor(round(abs(x))))
     
     stopifnot(length(data$x) > 0)
     stopifnot(length(data$x) == length((data$y)) ||
@@ -105,8 +89,5 @@ plotLogistic <- function(data,
     p <- .transformPlot(p)
     print(p)
 
-    if (z$unitTest)
-    {
-        return (list(LOA=LOA, fitted=data$f))
-    }
+    list(LOA=LOA, fitted=data$f)
 }

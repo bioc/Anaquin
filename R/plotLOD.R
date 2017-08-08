@@ -1,7 +1,5 @@
 #
-#  Copyright (C) 2016 - Garvan Institute of Medical Research
-#
-#  Ted Wong, Garvan Institute of Medical Research
+#  Copyright (C) 2017 - Garvan Institute of Medical Research
 #
 
 .getLODR <- function(ratio, model, x, y, pval)
@@ -94,8 +92,6 @@
 
         tryCatch (
         {
-            print(paste('Estmating LODR for', ratio))
-            
             r <- .fitCurve(ratio=ratio,
                            log10(t$measured),
                            log10(t$pval),
@@ -203,35 +199,35 @@
     print(.transformPlot(p))
 }
 
-plotLODR <- function(data,
-                     FDR=NULL,
-                     title=NULL,
-                     xlab=NULL,
-                     ylab=NULL,
-                     legTitle='Ratio',
-                     showConf=FALSE, ...)
+#
+# Create a "Likelihood of Differential" plot. Please refer to the ERCC guide
+# for more details. The implementation here is a simplified version.
+#
+
+plotLOD <- function(measured,
+                    pval,
+                    ratio,
+                    qval=NULL,
+                    FDR=NULL,
+                    title=NULL,
+                    xlab=NULL,
+                    ylab=NULL,
+                    legTitle='Ratio',
+                    showConf=FALSE)
 {
-    stopifnot(class(data) == 'AnaquinData')
-    
-    if (analysis(data) != 'PlotLODR' &
-        analysis(data) != 'plotLODR')
-    {
-        stop('plotLODR requires PlotLODR analysis')
-    }
+    stopifnot(!is.null(ratio))
+    stopifnot(!is.null(pval))
+    stopifnot(!is.null(measured))
 
-    stopifnot(!is.null(measured(data)))
-    stopifnot(!is.null(ratio(data)))
-    stopifnot(!is.null(pval(data)))
-
-    qval <- qval(data)
+    if (is.factor(pval)) { pval <- as.numeric(as.character(pval)) }
+    if (is.factor(measured)) { measured <- as.numeric(as.character(measured)) }
     
-    data <- data.frame(ratio=abs(round(ratio(data))),
-                    measured=measured(data),
-                        pval=pval(data))
+    data <- data.frame(pval=pval,
+                       ratio=abs(round(ratio)),
+                       measured=measured)
     
-    # Q-value is not compulsory (.fitLODR will calculate it)
-    data$qval <- qval
-
+    if (!is.null(qval)) { data$qval <- qval }
+    
     data <- data[data$pval!=0,]
     
     if (!is.null(FDR))
@@ -241,8 +237,8 @@ plotLODR <- function(data,
     else
     {
         data <- list(measured=data$measured,
-                         pval=data$pval,
-                        ratio=as.factor(data$ratio))
+                     pval=data$pval,
+                    ratio=as.factor(data$ratio))
     }
 
     .plotLODR(data=data,
@@ -252,10 +248,5 @@ plotLODR <- function(data,
           legTitle=legTitle,
           showConf=showConf)
     
-    x <- list(...)
-    
-    if (!is.null(x$unitTest) && x$unitTest)
-    {
-        return (data$limit)
-    }
+    data$limit
 }

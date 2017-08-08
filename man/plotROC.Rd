@@ -2,30 +2,21 @@
 \alias{plotROC}
 \title{Create ROC plot }
 \description{
-Create a receiver operating characteristic (ROC) plot at various threshold settings.
+Create receiver operating characteristic (ROC) plot at various threshold settings.
 }
 \usage{
-plotROC(data, refRats, title, legTitle, ...)
+plotROC(seqs, score, group, label, refGroup, title, legTitle)
 }
 \arguments{
-  \item{data}{Anaquin dataset created by \code{AnaquinData}. It needs to
-              define information in \bold{Details}.}
-  \item{refRats}{Reference ratio groups}
+  \item{seqs}{Sequin names}
+  \item{score}{How to rank ROC points}
+  \item{group}{How to group ROC points}
+  \item{label}{True-positive (TP) or false positive (FP)}  
+  \item{refGroup}{Reference ratio groups}
   \item{title}{Label of the plot. Default to \code{NULL}.}
   \item{legTitle}{Title of the legend. Default to \code{Ratio}.}
-  \item{...}{Reserved for internal testing}
 }
 \details{
-
-\code{plotROC} requires the following data inputs from \code{AnaquinData}.
-
-\tabular{rlll}{
-    \tab \code{seqs}  \tab List of sequin identifiers (eg. R2_11_2)\cr
-    \tab \code{label} \tab Classified labels ('TP' or 'FP')\cr
-    \tab \code{score} \tab How the ROC points should be ranked\cr    
-    \tab \code{ratio} \tab Expected ratio; eg: expected log-fold ratio\cr
-}
-
 Create a receiver operating characteristic (ROC) plot at various threshold
 settings. The true positive rate (TPR) is plotted on the x-axis and false
 positive rate (FPR) is plotted on the y-axis.
@@ -39,12 +30,9 @@ possibly optimal models and to discard suboptimal ones. In particularly, the
 AUC statistics indicate the performance of the model relatively to a random
 experiment (AUC 0.5). 
 }
-
 \value{
-The functions does not return anything but it prints a ROC plot and it's AUC
-statistics.
+The function prints ROC plot and return it's AUC statistics.
 }
-
 \examples{
 library(Anaquin)
 
@@ -58,7 +46,7 @@ data(UserGuideData_5.6.3)
 seqs <- row.names(UserGuideData_5.6.3)
 
 # Expected log-fold
-ratio <- UserGuideData_5.6.3$ExpLFC
+group <- abs(UserGuideData_5.6.3$ExpLFC)
 
 # How the ROC curves are ranked
 score <- 1-UserGuideData_5.6.3$Pval
@@ -66,13 +54,7 @@ score <- 1-UserGuideData_5.6.3$Pval
 # Classified labels (TP/FP)
 label <- UserGuideData_5.6.3$Label
 
-anaquin <- AnaquinData(analysis='PlotROC',
-                           seqs=seqs,
-                          ratio=ratio,
-                          score=score,
-                          label=label)
-
-plotROC(anaquin, title='ROC Plot', refRats=0)
+plotROC(seqs, score, group, label, title='ROC Plot', refGroup=0)
 }
 
 \author{Ted Wong \email{t.wong@garvan.org.au}}

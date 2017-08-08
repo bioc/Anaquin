@@ -10,40 +10,23 @@ library(Anaquin)
 test.PlotROC_1 <- function()
 {
     data(UserGuideData_5.6.3)
-    data <- UserGuideData_5.6.3
+    x <- UserGuideData_5.6.3
+    x$label <- ifelse(abs(x$ExpLFC) <= 0, 'FP', 'TP')
 
-    data$label <- ifelse(abs(data$ExpLFC) <= 0, 'FP', 'TP')
+    r <- plotROC(row.names(x),
+                 1-x$Pval,
+                 abs(x$ExpLFC),
+                 x$label,
+                 refGroup=0)
 
-    data <- AnaquinData(analysis='PlotROC',
-                            seqs=row.names(data),
-                           ratio=data$ExpLFC,
-                           score=1-data$Pval,
-                           label=data$label)
-
-    r <- plotROC(data, refRats=0, unitTest=TRUE)
-
-    checkEquals(as.character(r$AUC[1,]$Ratio), '1')
-    checkEqualsNumeric(r$AUC[1,]$AUC, 0.6713)
-    checkEquals(as.character(r$AUC[2,]$Ratio), '2')
-    checkEqualsNumeric(r$AUC[2,]$AUC, 0.7955)
-    checkEquals(as.character(r$AUC[3,]$Ratio), '3')
-    checkEqualsNumeric(r$AUC[3,]$AUC, 0.8939)
-    checkEquals(as.character(r$AUC[4,]$Ratio), '4')
-    checkEqualsNumeric(r$AUC[4,]$AUC, 0.9062)
-}
-
-test.PlotROC_2 <- function()
-{
-    data(UserGuideData_5.4.6.3)
-      
-    data <- UserGuideData_5.4.6.3
-    data <- AnaquinData(analysis='PlotLinear',
-                            seqs=row.names(data),
-                           input=log2(data$InputConcent),
-                        measured=log2(data$Observed1))
-    
-    checkException(plotROC(data, refRats=0, unitTest=TRUE))
+    checkEquals(as.character(r$AUC[1,][1]), '4')
+    checkEqualsNumeric(r$AUC[1,]$AUC, 0.9062)
+    checkEquals(as.character(r$AUC[2,][1]), '3')
+    checkEqualsNumeric(r$AUC[2,]$AUC, 0.8939)
+    checkEquals(as.character(r$AUC[3,][1]), '2')
+    checkEqualsNumeric(r$AUC[3,]$AUC, 0.7955)
+    checkEquals(as.character(r$AUC[4,][1]), '1')
+    checkEqualsNumeric(r$AUC[4,]$AUC, 0.6713)
 }
 
 test.PlotROC_1()
-test.PlotROC_2()

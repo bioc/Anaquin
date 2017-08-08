@@ -3,3 +3,11 @@ Changes in Version 0.1
 
 * Created Vignette
 * Initial submission to Bioconductor
+
+Changes in Version 2.0
+------------------------
+
+* Introduced Major changes to all R functions
+* Prepared upcoming sequins for germline and cancer mutations
+* Prepared upcoming sequins for metagenomic sequins
+

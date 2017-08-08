@@ -1,140 +1,101 @@
 #
-#  Copyright (C) 2016 - Garvan Institute of Medical Research
-#
-#  Ted Wong, Garvan Institute of Medical Research
+#  Copyright (C) 2017 - Garvan Institute of Medical Research
 #
 
-plotROC <- function(data, refRats, title=NULL, legTitle='Ratio', ...)
+plotROC <- function(seqs,
+                    score,
+                    group,
+                    label,
+                    refGroup,
+                    title=NULL,
+                    legTitle=NULL)
 {
-    stopifnot(class(data) == 'AnaquinData')
+    data <- data.frame(row.names = seqs,
+                       label = label,
+                       score = score,
+                       group = group)
     
-    if (analysis(data) != 'PlotROC' &
-        analysis(data) != 'plotROC')
-    {
-        stop('plotROC requires PlotROC analysis')
-    }
-
-    stopifnot(!is.null(score(data)))
-    stopifnot(!is.null(label(data)))
-    stopifnot(!is.null(ratio(data)))
-    stopifnot(!is.null(seqs(data)))
-    
-    x <- list(...)
-    
-    if (is.null(x$unitTest)) { x$unitTest <- FALSE }
-    
-    ratio <- ratio(data)
-    
-    if (is.numeric(ratio))
-    {
-        ratio <- factor(abs(round(ratio)))
-    }
-    
-    data <- data.frame(row.names=seqs(data),
-                           label=label(data),
-                           score=score(data),
-                           ratio=ratio)
     data <- data[!is.na(data$score),]
+    data <- data[!is.na(data$group),]
     data <- data[order(row.names(data)),]
-
+    
     data$label <- revalue(data$label, c('FP'='0', 'TP'='1'))
     
-    data   <- data[data$label=='1' | data$label=='0',]
-    ROCs   <- NULL
-    AUCs   <- NULL
-    ratios <- sort(data$ratio)
-
-    # Query ratios (not including the references)
-    uniqs <- unique(ratios)
+    data <- data[data$label=='1' | data$label=='0',]
+    ROC  <- NULL
+    AUC  <- NULL
     
-    # Remove the reference ratio (if any)
-    if (!is.null(refRats))
+    groups <- sort(data$group)
+    uniqs  <- unique(groups)
+    
+    if (!is.null(refGroup))
     {
-        uniqs <- uniqs[uniqs != refRats & !(uniqs %in% refRats)]
+        uniqs <- uniqs[uniqs != refGroup & !(uniqs %in% refGroup)]
     }
-
+    
     stopifnot(length(uniqs) > 0)
-
-    #
-    # The reference ratios should have the same length as the queries.
-    # If there is only a single reference, maybe we can replicate it to
-    # the query length?
-    #
     
-    if (length(refRats) == 1 && length(refRats) != length(uniqs))
-    {
-        refRats <- rep(refRats, length(uniqs))
-    }
-
-    # For each query ratio...
+    # For each non-reference group...
     for (i in c(1:length(uniqs)))
     {
-        # Query ratio
-        ratio <- uniqs[[i]]
+        # Query group
+        group <- uniqs[[i]]
         
-        # Reference ratio
-        refRat <- refRats[[i]];
-        
-        if (is.null(refRat))
+        if (is.null(refGroup))
         {
-            t <- data[!is.na(data$ratio) & data$ratio==ratio,]
+            t <- data[data$group==group,]
         }
         else
         {
-            t <- data[!is.na(data$ratio) &
-                          (data$ratio==ratio | data$ratio==refRat),]
+            t <- data[data$group==group | data$group==refGroup,]
         }
-
+        
         # No FP or TP?
         if (length(unique(t$label)) == 1)
         {
             # No TP... Add a TP...
             if (unique(t$label) == '0')
             {
-                t <- rbind(t, data.frame(label='1', score=0, ratio=ratio))
+                t <- rbind(t, data.frame(label='1', score=0, group=group))
             }
             
             # No FP... Add a FP...
             else
             {
-                t <- rbind(t, data.frame(label='0', score=0, ratio=ratio))
+                t <- rbind(t, data.frame(label='0', score=0, group=group))
             }
         }
         
         t <- t[with(t, order(score)),]
-
+        
         label <- ifelse(t$label == '1', 2, 1)
         preds <- prediction(t$score, label, label.ordering=c(1,2))
         perf  <- performance(preds, 'tpr', 'fpr')
         auc   <- performance(preds, 'auc')
         
-        AUCs <- rbind(AUCs, data.frame(Ratio=ratio,
-                                         AUC=round(unlist(auc@y.values), 4)))
-        ROCs <- rbind(ROCs, data.frame(FPR=unlist(perf@x.values),
-                                       TPR=unlist(perf@y.values), ratio=ratio))
-    }
-
-    ROCs$ratio = as.factor(ROCs$ratio)
-
-    p <- ggplot(data=ROCs, aes_string(x='FPR', y='TPR'))             + 
-            geom_abline(intercept=0, slope=1, linetype=2)            +
-            geom_path(size=1, aes_string(colour='ratio'), alpha=0.5) +
-            labs(colour=legTitle)                                    +
-            theme_bw()                                               +
-            theme(plot.title = element_text(hjust = 0.5))
-    
-    if (!is.null(title))
-    {
-        p <- p + ggtitle(title)
+        AUC <- rbind(AUC, data.frame(Group = group,
+                                     AUC = round(unlist(auc@y.values), 4)))
+        ROC <- rbind(ROC, data.frame(FPR = unlist(perf@x.values),
+                                     TPR = unlist(perf@y.values), group=group))
     }
     
-    print(kable(AUCs))
+    ROC$group = as.factor(ROC$group)
+    
+    p <- ggplot(data=ROC, aes_string(x='FPR', y='TPR'))             + 
+           geom_abline(intercept=0, slope=1, linetype=2)            +
+           geom_path(size=1, aes_string(colour='group'), alpha=0.5) +
+           labs(colour=legTitle)                                    +
+           theme_bw()                                               +
+           theme(plot.title = element_text(hjust = 0.5))
+    
+    if (!is.null(title)) { p <- p + ggtitle(title) }
+    
+    rownames(AUC) <- NULL
+    colnames(AUC) <- c('', 'AUC')
+    AUC <- AUC[order(-AUC$AUC),]
+    
+    print(kable(AUC, row.names=FALSE))
+    print(.transformPlot(p))
 
-    p <- .transformPlot(p)        
-    print(p)
-
-    if (x$unitTest)
-    {
-        return (list(AUC=AUCs))
-    }
+    list(AUC=AUC)
 }
