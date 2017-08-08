@@ -3,10 +3,10 @@
 Anaquin is a bioinformatics R-package for sequins, providing qualitative and quantitative controls for next-generation sequencing experiments. The following sequins are supported:
 
 <ul>
-<li>RnaQuin
+<li>RnaQuin</li>
+<li>VarQuin</li
+<li>MetaQuin</li>
 </ul>
-
-VarQuin and MetaQuin will be added in future releases.
 
 The project was started by <a href='https://www.google.com.au/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=0CB4QFjAAahUKEwiWt5b-7p3IAhWEjJQKHcxhDMg&url=http%3A%2F%2Fwww.garvan.org.au%2F&usg=AFQjCNF03pFvjJsIYqEbmxMV3SBTC5PJxg&sig2=jxHlEHfy_CNSJ4cZyVfvVQ'>Garvan Institute of Medical Research</a>. See <a href='http://www.sequin.xyz'>www.sequin.xyz</a> for further details. The maintainer for the project is <b>Ted Wong</b>, Garvan Institute of Medical Research.
 
@@ -14,12 +14,8 @@ The project was started by <a href='https://www.google.com.au/url?sa=t&rct=j&q=&
 
 * Spliced synthetic genes as internal controls in RNA sequencing experiments. Nature Methods (2016).
 * Representing genetic variation with synthetic DNA standards. Nature Methods (2016).
-
-## Bioinformatics
-
-<ul>
-<li>RNA-Seq</li>
-</ul>
+* ANAQUIN: a software toolkit for the analysis of spike-in controls for next generation sequencing. Bioinformatics (2017).
+* Reference standards for next-generation sequencing. Nature Reviews (2017).
 
 ## Overview
 
