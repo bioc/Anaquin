@@ -1,7 +1,7 @@
 Package: Anaquin
 Type: Package
 Title: Statistical analysis of sequins
-Version: 2.7.0
+Version: 2.7.1
 Date: 2017-08-08
 Author: Ted Wong
 Maintainer: Ted Wong <t.wong@garvan.org.au>
@@ -15,4 +15,4 @@ Suggests: RUnit, rmarkdown
 VignetteBuilder: knitr
 BugReports: https://github.com/student-t/RAnaquin/issues
 LazyData: true
-biocViews: DifferentialExpression, Preprocessing, RNASeq, GeneExpression, Software
+biocViews: ImmunoOncology, DifferentialExpression, Preprocessing, RNASeq, GeneExpression, Software
